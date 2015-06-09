@@ -23,10 +23,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class ConditionalExpressionNode : ExpressionNode<ConditionalExpression>
+    public class ConditionalExpressionNode : ExpressionNode
     {
         public ConditionalExpressionNode()
-            : base(ExpressionNodeType.Conditional) { }
+            : base(NodeKind.ConditionalExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

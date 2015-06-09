@@ -23,10 +23,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class InvocationExpressionNode : ExpressionNode<InvocationExpression>
+    public class InvocationExpressionNode : ExpressionNode
     {
         public InvocationExpressionNode()
-            : base(ExpressionNodeType.Invocation) { }
+            : base(NodeKind.InvocationExpression) { }
 
         #region DataMember
         #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

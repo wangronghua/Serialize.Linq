@@ -26,7 +26,7 @@ namespace Serialize.Linq.Nodes
     public class MemberExpressionNode : ExpressionNode<MemberExpression>
     {
         public MemberExpressionNode()
-            : base(ExpressionNodeType.Member) { }
+            : base(Nodes.NodeKind.Member) { }
 
         #region DataMember
         #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

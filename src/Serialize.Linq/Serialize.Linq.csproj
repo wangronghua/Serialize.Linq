@@ -100,13 +100,14 @@
     <Compile Include="Internals\ComplexPropertyMemberTypeEnumerator.cs" />
     <Compile Include="Internals\ComplexPropertyMemberTypeFinder.cs" />
     <Compile Include="ExpressionContext.cs" />
-    <Compile Include="Internals\ExpressionStack.cs" />
+    <Compile Include="Internals\NodeStack.cs" />
     <Compile Include="Internals\MemberTypeEnumerator.cs" />
     <Compile Include="Internals\PairStack.cs" />
     <Compile Include="Internals\PropertyMemberTypeEnumerator.cs" />
     <Compile Include="Internals\TypeStack.cs" />
     <Compile Include="Internals\ValueConverter.cs" />
     <Compile Include="Nodes\ConstructorInfoNode.cs" />
+    <Compile Include="Nodes\Node.cs" />
     <Compile Include="Nodes\TypeNode.cs" />
     <Compile Include="Nodes\MemberInfoNode.cs" />
     <Compile Include="Nodes\MethodInfoNode.cs" />
@@ -138,7 +139,6 @@
     <Compile Include="Nodes\MemberExpressionNode.cs" />
     <Compile Include="Nodes\MemberListBindingNode.cs" />
     <Compile Include="Nodes\MemberMemberBindingNode.cs" />
-    <Compile Include="Nodes\Node.cs" />
     <Compile Include="Nodes\ParameterExpressionNode.cs" />
     <Compile Include="Nodes\TypeBinaryExpressionNode.cs" />
     <Compile Include="Nodes\UnaryExpressionNode.cs" />

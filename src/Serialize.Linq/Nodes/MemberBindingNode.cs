@@ -26,7 +26,10 @@ namespace Serialize.Linq.Nodes
     #endregion
     public abstract class MemberBindingNode : Node
     {
-        protected MemberBindingNode() { }
+        protected MemberBindingNode(NodeKind nodeKind)
+            : base (nodeKind) { }
+
+        /*
 
         protected MemberBindingNode(INodeFactory factory)
             : base(factory) { }
@@ -37,6 +40,7 @@ namespace Serialize.Linq.Nodes
             this.BindingType = bindingType;
             this.Member = new MemberInfoNode(this.Factory, memberInfo);
         }
+        */
         
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

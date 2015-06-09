@@ -24,10 +24,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class NewExpressionNode : ExpressionNode<NewExpression>
+    public class NewExpressionNode : ExpressionNode
     {
         public NewExpressionNode()
-            : base(ExpressionNodeType.New) { }
+            : base(Nodes.NodeKind.New) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

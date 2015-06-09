@@ -27,10 +27,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class LambdaExpressionNode : ExpressionNode<LambdaExpression>
+    public class LambdaExpressionNode : ExpressionNode
     {
         public LambdaExpressionNode()
-            : base(ExpressionNodeType.Lambda) { }
+            : base(NodeKind.LambdaExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

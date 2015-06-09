@@ -31,7 +31,7 @@ namespace Serialize.Linq.Factories
 
             var retval = New(rootExpression);
 
-            var stack = new ExpressionStack();
+            var stack = new NodeStack();
             stack.Push(rootExpression, retval);
 
             Expression expression;
@@ -43,127 +43,128 @@ namespace Serialize.Linq.Factories
             return retval;
         }
 
-        private void Process(Expression expression, ExpressionNode expressionNode, ExpressionStack stack)
+        private void Process(Expression expression, ExpressionNode expressionNode, NodeStack stack)
         {
             expressionNode.NodeType = expression.NodeType;
             expressionNode.Type = _typeNodeFactory.CreateTypeNode(expression.Type);
 
             switch (expressionNode.ExpressionNodeType)
             {
-                case ExpressionNodeType.Binary:
+                case NodeKind.BinaryExpression:
                     this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.Conditional:
-                    this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
+                case NodeKind.ConditionalExpression:
+                    this.ProcessConditional((ConditionalExpression)expression, (ConditionalExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.Constant:
-                    this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
+                case NodeKind.ConstantExpression:
+                    this.ProcessConstant((ConstantExpression)expression, (ConstantExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.Invocation:
-                    this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
+                case NodeKind.InvocationExpression:
+                    this.ProcessInvocation((InvocationExpression)expression, (InvocationExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.Lambda:
-                    this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
+                case NodeKind.Lambda:
+                    this.ProcessLambda((LambdaExpression)expression, (LambdaExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.ListInit:
-                    this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
+                case NodeKind.ListInit:
+                    this.ProcessListInit((ListInitExpression)expression, (ListInitExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.Member:
-                    this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
+                case NodeKind.Member:
+                    this.ProcessMember((MemberExpression)expression, (MemberExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.MemberInit:
-                    this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
+                case NodeKind.MemberInit:
+                    this.ProcessMemberInit((MemberInitExpression)expression, (MemberInitExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.MethodCall:
-                    this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
+                case NodeKind.MethodCall:
+                    this.ProcessMethodCall((MethodCallExpression)expression, (MethodCallExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.New:
-                    this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
+                case NodeKind.New:
+                    this.ProcessNew((NewExpression)expression, (NewExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.NewArray:
+                case NodeKind.NewArray:
                     this.ProcessNewArray((NewArrayExpression)expression, (NewArrayExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.Parameter:
+                case NodeKind.Parameter:
                     this.ProcessParameter((ParameterExpression)expression, (ParameterExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.TypeBinary:
+                case NodeKind.TypeBinary:
                     this.ProcessTypeBinary((TypeBinaryExpression)expression, (TypeBinaryExpressionNode)expressionNode, stack);
                     break;
 
-                case ExpressionNodeType.Unary:
+                case NodeKind.Unary:
                     this.ProcessUnary((UnaryExpression)expression, (UnaryExpressionNode)expressionNode, stack);
                     break;
             }
         }
 
-        private void ProcessBinary(BinaryExpression expression, BinaryExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessBinary(BinaryExpression expression, BinaryExpressionNode expressionNode, NodeStack stack)
         {
-            
+            expressionNode.Method = new MethodInfoNode(this.Factory, expression.Method);
+            expressionNode.IsLiftedToNull = expression.IsLiftedToNull;
         }
 
-        private void ProcessConditional(ConditionalExpression expression, ConditionalExpressionNode expressionNode, ExpressionStack stack)
-        {
-
-        }
-
-        private void ProcessConstant(ConstantExpression expression, ConstantExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessConditional(ConditionalExpression expression, ConditionalExpressionNode expressionNode, NodeStack stack)
         {
 
         }
 
-        private void ProcessInvocation(InvocationExpression expression, InvocationExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessConstant(ConstantExpression expression, ConstantExpressionNode expressionNode, NodeStack stack)
         {
 
         }
-        private void ProcessLambda(LambdaExpression expression, LambdaExpressionNode expressionNode, ExpressionStack stack)
+
+        private void ProcessInvocation(InvocationExpression expression, InvocationExpressionNode expressionNode, NodeStack stack)
         {
 
         }
-        private void ProcessListInit(ListInitExpression expression, ListInitExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessLambda(LambdaExpression expression, LambdaExpressionNode expressionNode, NodeStack stack)
         {
 
         }
-        private void ProcessMember(MemberExpression expression, MemberExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessListInit(ListInitExpression expression, ListInitExpressionNode expressionNode, NodeStack stack)
         {
 
         }
-        private void ProcessMemberInit(MemberInitExpression expression, MemberInitExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessMember(MemberExpression expression, MemberExpressionNode expressionNode, NodeStack stack)
         {
 
         }
-        private void ProcessMethodCall(MethodCallExpression expression, MethodCallExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessMemberInit(MemberInitExpression expression, MemberInitExpressionNode expressionNode, NodeStack stack)
         {
 
         }
-        private void ProcessNewArray(NewArrayExpression expression, NewArrayExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessMethodCall(MethodCallExpression expression, MethodCallExpressionNode expressionNode, NodeStack stack)
         {
 
         }
-        private void ProcessNew(NewExpression expression, NewExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessNewArray(NewArrayExpression expression, NewArrayExpressionNode expressionNode, NodeStack stack)
         {
 
         }
-        private void ProcessParameter(ParameterExpression expression, ParameterExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessNew(NewExpression expression, NewExpressionNode expressionNode, NodeStack stack)
         {
 
         }
-        private void ProcessTypeBinary(TypeBinaryExpression expression, TypeBinaryExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessParameter(ParameterExpression expression, ParameterExpressionNode expressionNode, NodeStack stack)
         {
 
         }
-        private void ProcessUnary(UnaryExpression expression, UnaryExpressionNode expressionNode, ExpressionStack stack)
+        private void ProcessTypeBinary(TypeBinaryExpression expression, TypeBinaryExpressionNode expressionNode, NodeStack stack)
+        {
+
+        }
+        private void ProcessUnary(UnaryExpression expression, UnaryExpressionNode expressionNode, NodeStack stack)
         {
 
         }

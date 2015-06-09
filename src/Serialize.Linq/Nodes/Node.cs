@@ -17,7 +17,8 @@ namespace Serialize.Linq.Nodes
         ListInitExpression, MemberExpression, MemberInitExpression, MethodCallExpression, NewArrayExpression,
         NewExpression, ParameterExpression, TypeBinaryExpression, UnaryExpression,
 
-        ConstructorInfo, FieldInfo, MemberInfo, MethodInfo, PropertyInfo
+        ConstructorInfo, FieldInfo, MemberInfo, MethodInfo, PropertyInfo,
+        ElementInit, Type
     }
 
     #region DataContract

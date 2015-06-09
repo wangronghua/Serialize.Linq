@@ -26,7 +26,7 @@ namespace Serialize.Linq.Nodes
     public class UnaryExpressionNode : ExpressionNode<UnaryExpression>
     {
         public UnaryExpressionNode()
-            : base(ExpressionNodeType.Unary) { }
+            : base(Nodes.NodeKind.Unary) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

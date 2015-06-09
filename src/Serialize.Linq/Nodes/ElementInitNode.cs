@@ -23,35 +23,13 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class ElementInitNode
+    public class ElementInitNode : Node
     {
-        private readonly ITypeNodeFactory _typeNodeFactory;
-        private readonly IExpressionNodeFactory _expressionNodeFactory;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ElementInitNode"/> class.
         /// </summary>
-        public ElementInitNode() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ElementInitNode"/> class.
-        /// </summary>
-        /// <param name="typeNodeFactory">The type node factory.</param>
-        /// <param name="expressionNodeFactory">The expression node factory.</param>
-        /// <param name="elementInit">The element init.</param>
-        public ElementInitNode(ITypeNodeFactory typeNodeFactory, IExpressionNodeFactory expressionNodeFactory, ElementInit elementInit)
-        {
-            if (typeNodeFactory == null)
-                throw new ArgumentNullException("typeNodeFactory");
-            if (expressionNodeFactory == null)
-                throw new ArgumentNullException("expressionNodeFactory");
-
-            _typeNodeFactory = typeNodeFactory;
-            _expressionNodeFactory = expressionNodeFactory;
-
-            this.Initialize(elementInit);
-        }
-
+        public ElementInitNode()
+            : base (NodeKind.ElementInit) { }
         /// <summary>
         /// Initializes the specified element init.
         /// </summary>

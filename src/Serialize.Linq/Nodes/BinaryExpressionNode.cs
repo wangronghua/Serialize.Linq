@@ -23,13 +23,13 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class BinaryExpressionNode : ExpressionNode<BinaryExpression>
+    public class BinaryExpressionNode : ExpressionNode
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryExpressionNode"/> class.
         /// </summary>
         public BinaryExpressionNode() 
-            : base(ExpressionNodeType.Binary) { }
+            : base(NodeKind.BinaryExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

@@ -8,10 +8,7 @@
 
 using System;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -26,7 +23,10 @@ namespace Serialize.Linq.Nodes
 #endif
     #endregion
     public class TypeNode : Node
-    {        
+    {   
+        public TypeNode()
+            : base(NodeKind.Type) { }
+
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
         [DataMember(EmitDefaultValue = false)]

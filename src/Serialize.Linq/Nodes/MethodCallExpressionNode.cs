@@ -24,10 +24,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class MethodCallExpressionNode : ExpressionNode<MethodCallExpression>
+    public class MethodCallExpressionNode : ExpressionNode
     {
         public MethodCallExpressionNode()
-            : base(Nodes.NodeKind.MethodCall) { }
+            : base(NodeKind.MethodCallExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

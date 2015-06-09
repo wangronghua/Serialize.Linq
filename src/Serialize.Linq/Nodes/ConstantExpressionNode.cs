@@ -25,7 +25,7 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class ConstantExpressionNode : ExpressionNode<ConstantExpression>
+    public class ConstantExpressionNode : ExpressionNode
     {
         private object _value;
 
@@ -33,7 +33,7 @@ namespace Serialize.Linq.Nodes
         /// Initializes a new instance of the <see cref="ConstantExpressionNode"/> class.
         /// </summary>
         public ConstantExpressionNode()
-            : base(ExpressionNodeType.Constant) { }
+            : base(NodeKind.ConstantExpression) { }
 
         /*
         /// <summary>

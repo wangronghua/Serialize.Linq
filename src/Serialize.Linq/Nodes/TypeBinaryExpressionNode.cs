@@ -27,7 +27,7 @@ namespace Serialize.Linq.Nodes
     public class TypeBinaryExpressionNode : ExpressionNode<TypeBinaryExpression>
     {
         public TypeBinaryExpressionNode()
-            : base(ExpressionNodeType.TypeBinary) { }
+            : base(Nodes.NodeKind.TypeBinary) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

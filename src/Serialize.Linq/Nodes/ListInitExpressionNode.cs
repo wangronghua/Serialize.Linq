@@ -23,10 +23,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class ListInitExpressionNode : ExpressionNode<ListInitExpression>
+    public class ListInitExpressionNode : ExpressionNode
     {
         public ListInitExpressionNode()
-            : base(ExpressionNodeType.ListInit) { }
+            : base(NodeKind.ListInitExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
