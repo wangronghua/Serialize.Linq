@@ -25,10 +25,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class UnaryExpressionNode : ExpressionNode<UnaryExpression>
     {
-        public UnaryExpressionNode() { }
-
-        public UnaryExpressionNode(INodeFactory factory, UnaryExpression expression)
-            : base(factory, expression) { }
+        public UnaryExpressionNode()
+            : base(ExpressionNodeType.Unary) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -41,7 +39,7 @@ namespace Serialize.Linq.Nodes
 
         protected override void Initialize(UnaryExpression expression)
         {
-            this.Operand = this.Factory.Create(expression.Operand);
+            this.Operand = this.Factory.CreateExpressionNode(expression.Operand);
         }
 
         public override Expression ToExpression(ExpressionContext context)

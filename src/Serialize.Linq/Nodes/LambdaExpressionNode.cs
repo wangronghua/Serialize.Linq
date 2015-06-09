@@ -29,10 +29,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class LambdaExpressionNode : ExpressionNode<LambdaExpression>
     {
-        public LambdaExpressionNode() { }
-
-        public LambdaExpressionNode(INodeFactory factory, LambdaExpression expression)
-            : base(factory, expression) { }
+        public LambdaExpressionNode()
+            : base(ExpressionNodeType.Lambda) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -59,7 +57,7 @@ namespace Serialize.Linq.Nodes
 #else
             this.Parameters = new ExpressionNodeList(this.Factory, expression.Parameters.Select(p => (Expression)p));
 #endif
-            this.Body = this.Factory.Create(expression.Body);
+            this.Body = this.Factory.CreateExpressionNode(expression.Body);
         }
 
         public override Expression ToExpression(ExpressionContext context)

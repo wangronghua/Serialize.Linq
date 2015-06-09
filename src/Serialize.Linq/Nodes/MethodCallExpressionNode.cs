@@ -26,10 +26,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class MethodCallExpressionNode : ExpressionNode<MethodCallExpression>
     {
-        public MethodCallExpressionNode() { }
-
-        public MethodCallExpressionNode(INodeFactory factory, MethodCallExpression expression)
-            : base(factory, expression) { }
+        public MethodCallExpressionNode()
+            : base(Nodes.NodeKind.MethodCall) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -62,7 +60,7 @@ namespace Serialize.Linq.Nodes
         {
             this.Arguments = new ExpressionNodeList(this.Factory, expression.Arguments);
             this.Method = new MethodInfoNode(this.Factory, expression.Method);
-            this.Object = this.Factory.Create(expression.Object);
+            this.Object = this.Factory.CreateExpressionNode(expression.Object);
         }
 
         public override Expression ToExpression(ExpressionContext context)

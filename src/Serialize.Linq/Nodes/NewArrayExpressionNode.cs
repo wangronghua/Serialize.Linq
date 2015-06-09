@@ -25,10 +25,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class NewArrayExpressionNode : ExpressionNode<NewArrayExpression>
     {
-        public NewArrayExpressionNode() { }
-
-        public NewArrayExpressionNode(INodeFactory factory, NewArrayExpression expression)
-            : base(factory, expression) { }
+        public NewArrayExpressionNode()
+            : base(ExpressionNodeType.NewArray) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

@@ -28,15 +28,8 @@ namespace Serialize.Linq.Nodes
         /// <summary>
         /// Initializes a new instance of the <see cref="BinaryExpressionNode"/> class.
         /// </summary>
-        public BinaryExpressionNode() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="BinaryExpressionNode"/> class.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="expression">The expression.</param>
-        public BinaryExpressionNode(INodeFactory factory, BinaryExpression expression)
-            : base(factory, expression) { }
+        public BinaryExpressionNode() 
+            : base(ExpressionNodeType.Binary) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -119,9 +112,9 @@ namespace Serialize.Linq.Nodes
         /// <param name="expression">The expression.</param>
         protected override void Initialize(BinaryExpression expression)
         {
-            this.Left = this.Factory.Create(expression.Left);
-            this.Right = this.Factory.Create(expression.Right);
-            this.Conversion = this.Factory.Create(expression.Conversion);
+            this.Left = this.Factory.CreateExpressionNode(expression.Left);
+            this.Right = this.Factory.CreateExpressionNode(expression.Right);
+            this.Conversion = this.Factory.CreateExpressionNode(expression.Conversion);
             this.Method = new MethodInfoNode(this.Factory, expression.Method);
             this.IsLiftedToNull = expression.IsLiftedToNull;
         }

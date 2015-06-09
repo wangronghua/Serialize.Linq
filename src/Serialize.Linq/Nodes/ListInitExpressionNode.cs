@@ -25,10 +25,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class ListInitExpressionNode : ExpressionNode<ListInitExpression>
     {
-        public ListInitExpressionNode() { }
-
-        public ListInitExpressionNode(INodeFactory factory, ListInitExpression expression)
-            : base(factory, expression) { }
+        public ListInitExpressionNode()
+            : base(ExpressionNodeType.ListInit) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -51,7 +49,7 @@ namespace Serialize.Linq.Nodes
         protected override void Initialize(ListInitExpression expression)
         {
             this.Initializers = new ElementInitNodeList(this.Factory, expression.Initializers);
-            this.NewExpression = this.Factory.Create(expression.NewExpression);
+            this.NewExpression = this.Factory.CreateExpressionNode(expression.NewExpression);
         }
 
         public override Expression ToExpression(ExpressionContext context)

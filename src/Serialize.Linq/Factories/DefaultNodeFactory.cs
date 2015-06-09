@@ -59,9 +59,9 @@ namespace Serialize.Linq.Factories
         /// </summary>
         /// <param name="expression">The expression.</param>
         /// <returns></returns>
-        public ExpressionNode Create(Expression expression)
+        public ExpressionNode CreateExpressionNode(Expression expression)
         {
-            return _innerFactory.Create(expression);
+            return _innerFactory.CreateExpressionNode(expression);
         }
 
         /// <summary>
@@ -69,9 +69,9 @@ namespace Serialize.Linq.Factories
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
-        public TypeNode Create(Type type)
+        public TypeNode CreateTypeNode(Type type)
         {
-            return _innerFactory.Create(type);
+            return _innerFactory.CreateTypeNode(type);
         }
 
         /// <summary>

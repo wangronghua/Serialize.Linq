@@ -30,7 +30,7 @@ namespace Serialize.Linq.Nodes
         public MemberAssignmentNode(INodeFactory factory, MemberAssignment memberAssignment)
             : base(factory, memberAssignment.BindingType, memberAssignment.Member)
         {
-            this.Expression = this.Factory.Create(memberAssignment.Expression);
+            this.Expression = this.Factory.CreateExpressionNode(memberAssignment.Expression);
         }
 
         #region DataMember

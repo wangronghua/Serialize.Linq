@@ -27,45 +27,6 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class TypeNode : Node
     {        
-        public TypeNode() { }
-
-        public TypeNode(INodeFactory factory, Type type)
-            : base(factory)
-        {
-            this.Initialize(type);
-        }
-
-        private void Initialize(Type type)
-        {
-            if (type == null)
-                return;
-
-            var isAnonymousType = Attribute.IsDefined(type, typeof(CompilerGeneratedAttribute), false)
-                && type.IsGenericType && type.Name.Contains("AnonymousType")
-                && (type.Name.StartsWith("<>") || type.Name.StartsWith("VB$"))
-                && (type.Attributes & TypeAttributes.NotPublic) == TypeAttributes.NotPublic;
-
-            if (type.IsGenericType)
-            {
-                this.GenericArguments = type.GetGenericArguments().Select(t => new TypeNode(this.Factory, t)).ToArray();
-
-                var typeDefinition = type.GetGenericTypeDefinition();
-                if (isAnonymousType || !this.Factory.Settings.UseRelaxedTypeNames)
-                    this.Name = typeDefinition.AssemblyQualifiedName;
-                else
-                    this.Name = typeDefinition.FullName;
-
-
-            }
-            else
-            {
-                if (isAnonymousType || !this.Factory.Settings.UseRelaxedTypeNames)
-                    this.Name = type.AssemblyQualifiedName;
-                else
-                    this.Name = type.FullName;
-            }            
-        }
-
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
         [DataMember(EmitDefaultValue = false)]

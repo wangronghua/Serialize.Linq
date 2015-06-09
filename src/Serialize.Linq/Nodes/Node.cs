@@ -8,13 +8,18 @@
 
 using System;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
-    /// <summary>
-    /// 
-    /// </summary>
+    public enum NodeKind
+    {
+        BinaryExpression, ConditionalExpression, ConstantExpression, InvocationExpression, LambdaExpression,
+        ListInitExpression, MemberExpression, MemberInitExpression, MethodCallExpression, NewArrayExpression,
+        NewExpression, ParameterExpression, TypeBinaryExpression, UnaryExpression,
+
+        ConstructorInfo, FieldInfo, MemberInfo, MethodInfo, PropertyInfo
+    }
+
     #region DataContract
     [DataContract]
 #if !SILVERLIGHT
@@ -54,34 +59,12 @@ namespace Serialize.Linq.Nodes
     #endregion
     public abstract class Node
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Node"/> class.
-        /// </summary>
-        protected Node() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Node"/> class.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <exception cref="System.ArgumentNullException">factory</exception>
-        protected Node(INodeFactory factory)
+        protected Node(NodeKind nodeKind)
         {
-            if(factory == null)
-                throw new ArgumentNullException("factory");
-
-            this.Factory = factory;
+            this.NodeKind = nodeKind;
         }
 
-        /// <summary>
-        /// Gets the factory.
-        /// </summary>
-        /// <value>
-        /// The factory.
-        /// </value>
         [IgnoreDataMember]
-#if !SILVERLIGHT
-        [NonSerialized]
-#endif
-        public readonly INodeFactory Factory;        
+        internal NodeKind NodeKind { get; private set; }
     }
 }

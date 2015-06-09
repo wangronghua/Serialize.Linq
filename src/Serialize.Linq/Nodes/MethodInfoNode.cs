@@ -63,7 +63,7 @@ namespace Serialize.Linq.Nodes
 
             this.IsGenericMethod = true;
             this.Signature = memberInfo.GetGenericMethodDefinition().ToString();
-            this.GenericArguments = memberInfo.GetGenericArguments().Select(a => this.Factory.Create(a)).ToArray();
+            this.GenericArguments = memberInfo.GetGenericArguments().Select(a => this.Factory.CreateTypeNode(a)).ToArray();
         }
 
         public override MethodInfo ToMemberInfo(ExpressionContext context)

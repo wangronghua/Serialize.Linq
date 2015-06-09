@@ -25,10 +25,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class MemberExpressionNode : ExpressionNode<MemberExpression>
     {
-        public MemberExpressionNode() { }
-
-        public MemberExpressionNode(INodeFactory factory, MemberExpression expression)
-            : base(factory, expression) { }
+        public MemberExpressionNode()
+            : base(ExpressionNodeType.Member) { }
 
         #region DataMember
         #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -50,7 +48,7 @@ namespace Serialize.Linq.Nodes
 
         protected override void Initialize(MemberExpression expression)
         {
-            this.Expression = this.Factory.Create(expression.Expression);
+            this.Expression = this.Factory.CreateExpressionNode(expression.Expression);
             this.Member = new MemberInfoNode(this.Factory, expression.Member);
         }
 

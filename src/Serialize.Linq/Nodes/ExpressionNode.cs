@@ -9,58 +9,9 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
-    #region DataContract
-#if !SERIALIZE_LINQ_OPTIMIZE_SIZE    
-    #if SERIALIZE_LINQ_BORKED_VERION
-    [DataContract]
-    #else
-    [DataContract(Name = "ExpressionNodeGeneric")]
-    #endif
-#else
-    [DataContract(Name = "tE")]    
-#endif
-#if !SILVERLIGHT
-    [Serializable]
-#endif
-    #endregion
-    public abstract class ExpressionNode<TExpression> : ExpressionNode where TExpression : Expression
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExpressionNode{TExpression}"/> class.
-        /// </summary>
-        protected ExpressionNode() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExpressionNode{TExpression}"/> class.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="expression">The expression.</param>
-        protected ExpressionNode(INodeFactory factory, TExpression expression)
-            : base(factory, expression.NodeType, expression.Type)
-        {
-            this.Initialize(expression);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExpressionNode{TExpression}"/> class.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="nodeType">Type of the node.</param>
-        /// <param name="type">The type.</param>
-        protected ExpressionNode(INodeFactory factory, ExpressionType nodeType, Type type = null)
-            : base(factory, nodeType, type) { }
-
-        /// <summary>
-        /// Initializes this instance using the specified expression.
-        /// </summary>
-        /// <param name="expression">The expression.</param>
-        protected abstract void Initialize(TExpression expression);
-    }
-
     #region DataContract
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
     /// <summary>
@@ -79,20 +30,8 @@ namespace Serialize.Linq.Nodes
         /// <summary>
         /// Initializes a new instance of the <see cref="ExpressionNode"/> class.
         /// </summary>
-        protected ExpressionNode() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExpressionNode"/> class.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="nodeType">Type of the node.</param>
-        /// <param name="type">The type.</param>
-        protected ExpressionNode(INodeFactory factory, ExpressionType nodeType, Type type = null)
-            : base(factory)
-        {
-            this.NodeType = nodeType;
-            this.Type = new TypeNode(factory, type);
-        }
+        protected ExpressionNode(NodeKind nodeKind)
+            : base(nodeKind) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

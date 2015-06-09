@@ -25,10 +25,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class ConditionalExpressionNode : ExpressionNode<ConditionalExpression>
     {
-        public ConditionalExpressionNode() { }
-
-        public ConditionalExpressionNode(INodeFactory factory, ConditionalExpression expression)
-            : base(factory, expression) { }
+        public ConditionalExpressionNode()
+            : base(ExpressionNodeType.Conditional) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -63,9 +61,9 @@ namespace Serialize.Linq.Nodes
         /// <param name="expression">The expression.</param>
         protected override void Initialize(ConditionalExpression expression)
         {
-            this.Test = this.Factory.Create(expression.Test);
-            this.IfTrue = this.Factory.Create(expression.IfTrue);
-            this.IfFalse = this.Factory.Create(expression.IfFalse);
+            this.Test = this.Factory.CreateExpressionNode(expression.Test);
+            this.IfTrue = this.Factory.CreateExpressionNode(expression.IfTrue);
+            this.IfFalse = this.Factory.CreateExpressionNode(expression.IfFalse);
         }
 
         /// <summary>

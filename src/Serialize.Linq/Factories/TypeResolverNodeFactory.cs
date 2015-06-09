@@ -158,14 +158,14 @@ namespace Serialize.Linq.Factories
         {
             Expression inlineExpression;
             if (this.TryToInlineExpression(memberExpression, out inlineExpression))
-                return this.Create(inlineExpression);
+                return this.CreateExpressionNode(inlineExpression);
 
             object constantValue;
             Type constantValueType;
 
             return this.TryGetConstantValueFromMemberExpression(memberExpression, out constantValue, out constantValueType)
                 ? new ConstantExpressionNode(this, constantValue, constantValueType)
-                : base.Create(memberExpression);
+                : base.CreateExpressionNode(memberExpression);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Serialize.Linq.Factories
                 var constantValue = Expression.Lambda(methodCallExpression).Compile().DynamicInvoke();
                 return new ConstantExpressionNode(this, constantValue);
             }
-            return base.Create(methodCallExpression);
+            return base.CreateExpressionNode(methodCallExpression);
         }
 
         /// <summary>
@@ -199,13 +199,13 @@ namespace Serialize.Linq.Factories
         /// </summary>
         /// <param name="expression">The expression.</param>
         /// <returns></returns>
-        public override ExpressionNode Create(Expression expression)
+        public override ExpressionNode CreateExpressionNode(Expression expression)
         {
             if (expression is MemberExpression)
                 return this.ResolveMemberExpression(expression as MemberExpression);
             if (expression is MethodCallExpression)
                 return this.ResolveMethodCallExpression(expression as MethodCallExpression);
-            return base.Create(expression);
+            return base.CreateExpressionNode(expression);
         }
     }
 }

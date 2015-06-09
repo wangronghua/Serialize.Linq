@@ -126,7 +126,7 @@ namespace Serialize.Linq.Tests
             where TFactory : INodeFactory
         {
             var factory = (TFactory)Activator.CreateInstance(typeof(TFactory));
-            var expressionNode = factory.Create(expression);
+            var expressionNode = factory.CreateExpressionNode(expression);
             var createdExpression = expressionNode.ToExpression();
 
             ExpressionAssert.AreEqual(expression, createdExpression, message);

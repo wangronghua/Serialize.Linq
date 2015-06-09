@@ -32,8 +32,10 @@ namespace Serialize.Linq.Nodes
         /// <summary>
         /// Initializes a new instance of the <see cref="ConstantExpressionNode"/> class.
         /// </summary>
-        public ConstantExpressionNode() { }
+        public ConstantExpressionNode()
+            : base(ExpressionNodeType.Constant) { }
 
+        /*
         /// <summary>
         /// Initializes a new instance of the <see cref="ConstantExpressionNode"/> class.
         /// </summary>
@@ -53,17 +55,9 @@ namespace Serialize.Linq.Nodes
         {
             this.Value = value;
             if (type != null)
-                base.Type = factory.Create(type);
+                base.Type = factory.CreateTypeNode(type);
 
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConstantExpressionNode"/> class.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="expression">The expression.</param>
-        public ConstantExpressionNode(INodeFactory factory, ConstantExpression expression)
-            : base(factory, expression) { }
+        }*/
 
         /// <summary>
         /// Gets or sets the type.
@@ -80,7 +74,7 @@ namespace Serialize.Linq.Nodes
                 if (this.Value != null)
                 {
                     if (value == null)
-                        value = this.Factory.Create(this.Value.GetType());
+                        value = this.Factory.CreateTypeNode(this.Value.GetType());
                     else
                     {
                         var context = new ExpressionContext();
@@ -120,7 +114,7 @@ namespace Serialize.Linq.Nodes
                     if (type == null)
                     {
                         if(this.Factory != null)
-                            base.Type = this.Factory.Create(_value.GetType());
+                            base.Type = this.Factory.CreateTypeNode(_value.GetType());
                         return;
                     }
                     _value = ValueConverter.Convert(_value, type);

@@ -82,17 +82,26 @@
     <Compile Include="..\Serialize.Linq\Factories\DefaultNodeFactory.cs">
       <Link>Factories\DefaultNodeFactory.cs</Link>
     </Compile>
+    <Compile Include="..\Serialize.Linq\Factories\ExpressionNodeFactory.cs">
+      <Link>Factories\ExpressionNodeFactory.cs</Link>
+    </Compile>
     <Compile Include="..\Serialize.Linq\Factories\FactorySettings.cs">
       <Link>Factories\FactorySettings.cs</Link>
     </Compile>
     <Compile Include="..\Serialize.Linq\Factories\NodeFactory.cs">
       <Link>Factories\NodeFactory.cs</Link>
     </Compile>
+    <Compile Include="..\Serialize.Linq\Factories\TypeNodeFactory.cs">
+      <Link>Factories\TypeNodeFactory.cs</Link>
+    </Compile>
     <Compile Include="..\Serialize.Linq\Factories\TypeResolverNodeFactory.cs">
       <Link>Factories\TypeResolverNodeFactory.cs</Link>
     </Compile>
     <Compile Include="..\Serialize.Linq\Interfaces\IBinarySerializer.cs">
       <Link>Interfaces\IBinarySerializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Serialize.Linq\Interfaces\IExpressionNodeFactory.cs">
+      <Link>Interfaces\IExpressionNodeFactory.cs</Link>
     </Compile>
     <Compile Include="..\Serialize.Linq\Interfaces\IJsonSerializer.cs">
       <Link>Interfaces\IJsonSerializer.cs</Link>
@@ -106,6 +115,9 @@
     <Compile Include="..\Serialize.Linq\Interfaces\ITextSerializer.cs">
       <Link>Interfaces\ITextSerializer.cs</Link>
     </Compile>
+    <Compile Include="..\Serialize.Linq\Interfaces\ITypeNodeFactory.cs">
+      <Link>Interfaces\ITypeNodeFactory.cs</Link>
+    </Compile>
     <Compile Include="..\Serialize.Linq\Interfaces\IXmlSerializer.cs">
       <Link>Interfaces\IXmlSerializer.cs</Link>
     </Compile>
@@ -115,11 +127,20 @@
     <Compile Include="..\Serialize.Linq\Internals\ComplexPropertyMemberTypeFinder.cs">
       <Link>Internals\ComplexPropertyMemberTypeFinder.cs</Link>
     </Compile>
+    <Compile Include="..\Serialize.Linq\Internals\ExpressionStack.cs">
+      <Link>Internals\ExpressionStack.cs</Link>
+    </Compile>
     <Compile Include="..\Serialize.Linq\Internals\MemberTypeEnumerator.cs">
       <Link>Internals\MemberTypeEnumerator.cs</Link>
     </Compile>
+    <Compile Include="..\Serialize.Linq\Internals\PairStack.cs">
+      <Link>Internals\PairStack.cs</Link>
+    </Compile>
     <Compile Include="..\Serialize.Linq\Internals\PropertyMemberTypeEnumerator.cs">
       <Link>Internals\PropertyMemberTypeEnumerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Serialize.Linq\Internals\TypeStack.cs">
+      <Link>Internals\TypeStack.cs</Link>
     </Compile>
     <Compile Include="..\Serialize.Linq\Internals\ValueConverter.cs">
       <Link>Internals\ValueConverter.cs</Link>

@@ -26,10 +26,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class ConstructorInfoNode : MemberNode<ConstructorInfo>
     {
-        public ConstructorInfoNode() { }
-
-        public ConstructorInfoNode(INodeFactory factory, ConstructorInfo memberInfo)
-            : base(factory, memberInfo) { }
+        public ConstructorInfoNode()
+            : base(NodeKind.ConstructorInfo) { }
 
         /// <summary>
         /// Gets the member infos for the specified type.

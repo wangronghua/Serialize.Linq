@@ -29,13 +29,13 @@ namespace Serialize.Linq.Nodes
     {
         public ExpressionNodeList() { }
 
-        public ExpressionNodeList(INodeFactory factory, IEnumerable<Expression> items)
+        public ExpressionNodeList(IExpressionNodeFactory factory, IEnumerable<Expression> items)
         {
             if (factory == null)
                 throw new ArgumentNullException("factory");
             if (items == null)
                 throw new ArgumentNullException("items");
-            this.AddRange(items.Select(factory.Create));
+            this.AddRange(items.Select(factory.CreateExpressionNode));
         }
 
         internal IEnumerable<Expression> GetExpressions(ExpressionContext context)

@@ -25,10 +25,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class InvocationExpressionNode : ExpressionNode<InvocationExpression>
     {
-        public InvocationExpressionNode() { }
-
-        public InvocationExpressionNode(INodeFactory factory, InvocationExpression expression)
-            : base(factory, expression) { }
+        public InvocationExpressionNode()
+            : base(ExpressionNodeType.Invocation) { }
 
         #region DataMember
         #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -51,7 +49,7 @@ namespace Serialize.Linq.Nodes
         protected override void Initialize(InvocationExpression expression)
         {
             this.Arguments = new ExpressionNodeList(this.Factory, expression.Arguments);
-            this.Expression = this.Factory.Create(expression.Expression);
+            this.Expression = this.Factory.CreateExpressionNode(expression.Expression);
         }
 
         public override Expression ToExpression(ExpressionContext context)

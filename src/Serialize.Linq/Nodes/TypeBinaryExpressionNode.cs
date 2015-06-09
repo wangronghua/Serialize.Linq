@@ -26,10 +26,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class TypeBinaryExpressionNode : ExpressionNode<TypeBinaryExpression>
     {
-        public TypeBinaryExpressionNode() { }
-
-        public TypeBinaryExpressionNode(INodeFactory factory, TypeBinaryExpression expression)
-            : base(factory, expression) { }
+        public TypeBinaryExpressionNode()
+            : base(ExpressionNodeType.TypeBinary) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -52,8 +50,8 @@ namespace Serialize.Linq.Nodes
 
         protected override void Initialize(TypeBinaryExpression expression)
         {
-            this.Expression = this.Factory.Create(expression.Expression);
-            this.TypeOperand = this.Factory.Create(expression.TypeOperand);
+            this.Expression = this.Factory.CreateExpressionNode(expression.Expression);
+            this.TypeOperand = this.Factory.CreateTypeNode(expression.TypeOperand);
         }
 
         public override Expression ToExpression(ExpressionContext context)

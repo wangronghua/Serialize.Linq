@@ -27,10 +27,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class ParameterExpressionNode : ExpressionNode<ParameterExpression>
     {
-        public ParameterExpressionNode() { }
-
-        public ParameterExpressionNode(INodeFactory factory, ParameterExpression expression)
-            : base(factory, expression) { }
+        public ParameterExpressionNode()
+            : base(ExpressionNodeType.Parameter) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

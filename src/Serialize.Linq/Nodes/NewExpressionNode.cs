@@ -26,10 +26,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class NewExpressionNode : ExpressionNode<NewExpression>
     {
-        public NewExpressionNode() { }
-
-        public NewExpressionNode(INodeFactory factory, NewExpression expression)
-            : base(factory, expression) { }
+        public NewExpressionNode()
+            : base(ExpressionNodeType.New) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

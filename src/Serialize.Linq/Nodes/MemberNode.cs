@@ -35,19 +35,8 @@ namespace Serialize.Linq.Nodes
         /// <summary>
         /// Initializes a new instance of the <see cref="MemberNode{TMemberInfo}"/> class.
         /// </summary>
-        protected MemberNode() { }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MemberNode{TMemberInfo}"/> class.
-        /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <param name="memberInfo">The member info.</param>
-        protected MemberNode(INodeFactory factory, TMemberInfo memberInfo)
-            : base(factory)
-        {
-            if (memberInfo != null)
-                this.Initialize(memberInfo);
-        }
+        protected MemberNode(NodeKind nodeKind)
+            : base (nodeKind) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -85,7 +74,7 @@ namespace Serialize.Linq.Nodes
         /// <param name="memberInfo">The member info.</param>
         protected virtual void Initialize(TMemberInfo memberInfo)
         {
-            this.DeclaringType = this.Factory.Create(memberInfo.DeclaringType);
+            this.DeclaringType = _typeNodeFactory.CreateTypeNode(memberInfo.DeclaringType);
             this.Signature = memberInfo.ToString();
         }
 
