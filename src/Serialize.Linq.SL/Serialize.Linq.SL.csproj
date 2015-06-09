@@ -91,9 +91,6 @@
     <Compile Include="..\Serialize.Linq\Factories\NodeFactory.cs">
       <Link>Factories\NodeFactory.cs</Link>
     </Compile>
-    <Compile Include="..\Serialize.Linq\Factories\TypeNodeFactory.cs">
-      <Link>Factories\TypeNodeFactory.cs</Link>
-    </Compile>
     <Compile Include="..\Serialize.Linq\Factories\TypeResolverNodeFactory.cs">
       <Link>Factories\TypeResolverNodeFactory.cs</Link>
     </Compile>
@@ -127,20 +124,17 @@
     <Compile Include="..\Serialize.Linq\Internals\ComplexPropertyMemberTypeFinder.cs">
       <Link>Internals\ComplexPropertyMemberTypeFinder.cs</Link>
     </Compile>
-    <Compile Include="..\Serialize.Linq\Internals\ExpressionStack.cs">
-      <Link>Internals\ExpressionStack.cs</Link>
-    </Compile>
     <Compile Include="..\Serialize.Linq\Internals\MemberTypeEnumerator.cs">
       <Link>Internals\MemberTypeEnumerator.cs</Link>
+    </Compile>
+    <Compile Include="..\Serialize.Linq\Internals\NodeStack.cs">
+      <Link>Internals\NodeStack.cs</Link>
     </Compile>
     <Compile Include="..\Serialize.Linq\Internals\PairStack.cs">
       <Link>Internals\PairStack.cs</Link>
     </Compile>
     <Compile Include="..\Serialize.Linq\Internals\PropertyMemberTypeEnumerator.cs">
       <Link>Internals\PropertyMemberTypeEnumerator.cs</Link>
-    </Compile>
-    <Compile Include="..\Serialize.Linq\Internals\TypeStack.cs">
-      <Link>Internals\TypeStack.cs</Link>
     </Compile>
     <Compile Include="..\Serialize.Linq\Internals\ValueConverter.cs">
       <Link>Internals\ValueConverter.cs</Link>
@@ -225,6 +219,9 @@
     </Compile>
     <Compile Include="..\Serialize.Linq\Nodes\Node.cs">
       <Link>Nodes\Node.cs</Link>
+    </Compile>
+    <Compile Include="..\Serialize.Linq\Nodes\NodeList.cs">
+      <Link>Nodes\NodeList.cs</Link>
     </Compile>
     <Compile Include="..\Serialize.Linq\Nodes\ParameterExpressionNode.cs">
       <Link>Nodes\ParameterExpressionNode.cs</Link>

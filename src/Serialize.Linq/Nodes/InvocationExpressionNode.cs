@@ -9,7 +9,6 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -45,12 +44,6 @@ namespace Serialize.Linq.Nodes
 #endif
         #endregion
         public ExpressionNode Expression { get; set; }
-
-        protected override void Initialize(InvocationExpression expression)
-        {
-            this.Arguments = new ExpressionNodeList(this.Factory, expression.Arguments);
-            this.Expression = this.Factory.CreateExpressionNode(expression.Expression);
-        }
 
         public override Expression ToExpression(ExpressionContext context)
         {

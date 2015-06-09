@@ -15,10 +15,12 @@ namespace Serialize.Linq.Nodes
     {
         BinaryExpression, ConditionalExpression, ConstantExpression, InvocationExpression, LambdaExpression,
         ListInitExpression, MemberExpression, MemberInitExpression, MethodCallExpression, NewArrayExpression,
-        NewExpression, ParameterExpression, TypeBinaryExpression, UnaryExpression,
+        NewExpression, ParameterExpression, TypeBinaryExpression, UnaryExpression, ExpressionList,
 
-        ConstructorInfo, FieldInfo, MemberInfo, MethodInfo, PropertyInfo,
-        ElementInit, Type
+        ConstructorInfo, FieldInfo, MemberInfo, MethodInfo, PropertyInfo, MemberInfoList,
+        ElementInit, ElementInitList, Type,
+
+        MemberMemberBinding, MemberListBinding, MemberAssignment, MemberBindingList
     }
 
     #region DataContract

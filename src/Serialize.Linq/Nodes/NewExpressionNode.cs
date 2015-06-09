@@ -27,7 +27,7 @@ namespace Serialize.Linq.Nodes
     public class NewExpressionNode : ExpressionNode
     {
         public NewExpressionNode()
-            : base(Nodes.NodeKind.New) { }
+            : base(NodeKind.NewExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -55,13 +55,6 @@ namespace Serialize.Linq.Nodes
 #endif
         #endregion
         public MemberInfoNodeList Members { get; set; }
-
-        protected override void Initialize(NewExpression expression)
-        {
-            this.Arguments = new ExpressionNodeList(this.Factory, expression.Arguments);
-            this.Constructor = new ConstructorInfoNode(this.Factory, expression.Constructor);
-            this.Members = new MemberInfoNodeList(this.Factory, expression.Members);
-        }
 
         public override Expression ToExpression(ExpressionContext context)
         {

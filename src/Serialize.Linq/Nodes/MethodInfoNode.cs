@@ -27,10 +27,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class MethodInfoNode : MemberNode<MethodInfo>
     {
-        public MethodInfoNode() { }
-
-        public MethodInfoNode(INodeFactory factory, MethodInfo memberInfo)
-            : base(factory, memberInfo) { }
+        public MethodInfoNode()
+            : base(NodeKind.MethodInfo) { }
 
         protected override IEnumerable<MethodInfo> GetMemberInfosForType(Type type)
         {

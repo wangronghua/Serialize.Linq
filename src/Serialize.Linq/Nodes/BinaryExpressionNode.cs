@@ -9,7 +9,6 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -105,19 +104,6 @@ namespace Serialize.Linq.Nodes
 #endif
         #endregion
         public ExpressionNode Right { get; set; }
-
-        /// <summary>
-        /// Initializes the specified expression.
-        /// </summary>
-        /// <param name="expression">The expression.</param>
-        protected override void Initialize(BinaryExpression expression)
-        {
-            this.Left = this.Factory.CreateExpressionNode(expression.Left);
-            this.Right = this.Factory.CreateExpressionNode(expression.Right);
-            this.Conversion = this.Factory.CreateExpressionNode(expression.Conversion);
-            this.Method = new MethodInfoNode(this.Factory, expression.Method);
-            this.IsLiftedToNull = expression.IsLiftedToNull;
-        }
 
         /// <summary>
         /// Converts this instance to an expression.

@@ -23,10 +23,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class NewArrayExpressionNode : ExpressionNode<NewArrayExpression>
+    public class NewArrayExpressionNode : ExpressionNode
     {
         public NewArrayExpressionNode()
-            : base(Nodes.NodeKind.NewArray) { }
+            : base(NodeKind.NewArrayExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -36,11 +36,6 @@ namespace Serialize.Linq.Nodes
 #endif
         #endregion
         public ExpressionNodeList Expressions { get; set; }
-
-        protected override void Initialize(NewArrayExpression expression)
-        {
-            this.Expressions = new ExpressionNodeList(this.Factory, expression.Expressions);
-        }
 
         public override Expression ToExpression(ExpressionContext context)
         {

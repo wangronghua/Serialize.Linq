@@ -7,7 +7,10 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Serialize.Linq.Interfaces;
 using Serialize.Linq.Internals;
 using Serialize.Linq.Nodes;
@@ -50,160 +53,228 @@ namespace Serialize.Linq.Factories
             object current;
             Node currentNode;
             while (nodeStack.TryPop(out current, out currentNode))
-            {
-                
-            }
+                this.Process(current, currentNode, nodeStack);
 
             return rootNode;
         }
-
-        /// <summary>
-        /// Creates an expression node from an expression.
-        /// </summary>
-        /// <param name="expression">The expression.</param>
-        /// <returns></returns>
-        /// <exception cref="System.ArgumentException">Unknown expression of type  + expression.GetType()</exception>
-        public virtual ExpressionNode CreateExpressionNode(Expression expression)
+        
+        private void Process(object obj, Node node, NodeStack stack)
         {
-            var expressionNodeFactory = new ExpressionNodeFactory(this, this.Settings);
-            return expressionNodeFactory.CreateExpressionNode(expression);
+            var expression = obj as Expression;
+            if (expression != null)
+            {
+                this.ProcessExpression(expression, (ExpressionNode)node, stack);
+                return;
+            }
+
+            switch (node.NodeKind)
+            {
+                case NodeKind.Type:
+                    this.ProcessType((Type)obj, (TypeNode)node, stack);
+                    break;
+            }
         }
 
-        /// <summary>
-        /// Creates an type node from a type.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns></returns>
-        public TypeNode CreateTypeNode(Type type)
-        {
-            var typeNodeFactory = new TypeNodeFactory(this.Settings);
-            return typeNodeFactory.CreateTypeNode(type);
-        }
-
-        private void Process(Expression expression, ExpressionNode expressionNode, NodeStack stack)
+        protected virtual void ProcessExpression(Expression expression, ExpressionNode expressionNode, NodeStack stack)
         {
             expressionNode.NodeType = expression.NodeType;
-            expressionNode.Type = _typeNodeFactory.CreateTypeNode(expression.Type);
+            expressionNode.Type = NewAndStack<TypeNode>(expression.Type, stack);
 
             switch (expressionNode.NodeKind)
             {
                 case NodeKind.BinaryExpression:
-                    this.ProcessBinary((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
+                    this.ProcessBinaryExpression((BinaryExpression)expression, (BinaryExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.ConditionalExpression:
-                    this.ProcessConditional((ConditionalExpression)expression, (ConditionalExpressionNode)expressionNode, stack);
+                    this.ProcessConditionalExpression((ConditionalExpression)expression, (ConditionalExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.ConstantExpression:
-                    this.ProcessConstant((ConstantExpression)expression, (ConstantExpressionNode)expressionNode, stack);
+                    this.ProcessConstantExpression((ConstantExpression)expression, (ConstantExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.InvocationExpression:
-                    this.ProcessInvocation((InvocationExpression)expression, (InvocationExpressionNode)expressionNode, stack);
+                    this.ProcessInvocationExpression((InvocationExpression)expression, (InvocationExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.LambdaExpression:
-                    this.ProcessLambda((LambdaExpression)expression, (LambdaExpressionNode)expressionNode, stack);
+                    this.ProcessLambdaExpression((LambdaExpression)expression, (LambdaExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.ListInitExpression:
-                    this.ProcessListInit((ListInitExpression)expression, (ListInitExpressionNode)expressionNode, stack);
+                    this.ProcessListInitExpression((ListInitExpression)expression, (ListInitExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.MemberExpression:
-                    this.ProcessMember((MemberExpression)expression, (MemberExpressionNode)expressionNode, stack);
+                    this.ProcessMemberExpression((MemberExpression)expression, (MemberExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.MemberInitExpression:
-                    this.ProcessMemberInit((MemberInitExpression)expression, (MemberInitExpressionNode)expressionNode, stack);
+                    this.ProcessMemberInitExpression((MemberInitExpression)expression, (MemberInitExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.MethodCallExpression:
-                    this.ProcessMethodCall((MethodCallExpression)expression, (MethodCallExpressionNode)expressionNode, stack);
+                    this.ProcessMethodCallExpression((MethodCallExpression)expression, (MethodCallExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.NewExpression:
-                    this.ProcessNew((NewExpression)expression, (NewExpressionNode)expressionNode, stack);
+                    this.ProcessNewExpression((NewExpression)expression, (NewExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.NewArrayExpression:
-                    this.ProcessNewArray((NewArrayExpression)expression, (NewArrayExpressionNode)expressionNode, stack);
+                    this.ProcessNewArrayExpression((NewArrayExpression)expression, (NewArrayExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.ParameterExpression:
-                    this.ProcessParameter((ParameterExpression)expression, (ParameterExpressionNode)expressionNode, stack);
+                    this.ProcessParameterExpression((ParameterExpression)expression, (ParameterExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.TypeBinaryExpression:
-                    this.ProcessTypeBinary((TypeBinaryExpression)expression, (TypeBinaryExpressionNode)expressionNode, stack);
+                    this.ProcessTypeBinaryExpression((TypeBinaryExpression)expression, (TypeBinaryExpressionNode)expressionNode, stack);
                     break;
 
                 case NodeKind.UnaryExpression:
-                    this.ProcessUnary((UnaryExpression)expression, (UnaryExpressionNode)expressionNode, stack);
+                    this.ProcessUnaryExpression((UnaryExpression)expression, (UnaryExpressionNode)expressionNode, stack);
                     break;
             }
         }
 
-        private void ProcessBinary(BinaryExpression expression, BinaryExpressionNode expressionNode, NodeStack stack)
+        private void ProcessBinaryExpression(BinaryExpression expression, BinaryExpressionNode expressionNode, NodeStack stack)
         {
-            expressionNode.Method = new MethodInfoNode(this.Factory, expression.Method);
+            expressionNode.Left = NewAndStack<ExpressionNode>(expression.Left, stack);
+            expressionNode.Right = NewAndStack<ExpressionNode>(expression.Right, stack);
+            expressionNode.Conversion = NewAndStack<ExpressionNode>(expression.Conversion, stack);
+            expressionNode.Method = NewAndStack<MethodInfoNode>(expression.Method, stack);
             expressionNode.IsLiftedToNull = expression.IsLiftedToNull;
         }
 
-        private void ProcessConditional(ConditionalExpression expression, ConditionalExpressionNode expressionNode, NodeStack stack)
+        private void ProcessConditionalExpression(ConditionalExpression expression, ConditionalExpressionNode expressionNode, NodeStack stack)
+        {
+            expressionNode.IfFalse = NewAndStack<ExpressionNode>(expression.IfFalse, stack);
+            expressionNode.IfTrue = NewAndStack<ExpressionNode>(expression.IfTrue, stack);
+            expressionNode.Test = NewAndStack<ExpressionNode>(expression.Test, stack);
+        }
+
+        private void ProcessConstantExpression(ConstantExpression expression, ConstantExpressionNode expressionNode, NodeStack stack)
         {
 
         }
 
-        private void ProcessConstant(ConstantExpression expression, ConstantExpressionNode expressionNode, NodeStack stack)
+        private void ProcessInvocationExpression(InvocationExpression expression, InvocationExpressionNode expressionNode, NodeStack stack)
         {
-
+            expressionNode.Arguments = NewAndStack<ExpressionNodeList>(expression.Arguments, stack);
+            expressionNode.Expression = NewAndStack<ExpressionNode>(expression.Expression, stack);
         }
 
-        private void ProcessInvocation(InvocationExpression expression, InvocationExpressionNode expressionNode, NodeStack stack)
+        private void ProcessLambdaExpression(LambdaExpression expression, LambdaExpressionNode expressionNode, NodeStack stack)
         {
+            expressionNode.Body = NewAndStack<ExpressionNode>(expression.Body, stack);
 
+            IEnumerable<Expression> parameters =
+#if !WINDOWS_PHONE7
+                expression.Parameters;
+#else
+                expression.Parameters.Select(p => (Expression)p);
+#endif
+            expressionNode.Parameters = NewAndStack<ExpressionNodeList>(parameters, stack);
         }
-        private void ProcessLambda(LambdaExpression expression, LambdaExpressionNode expressionNode, NodeStack stack)
+        private void ProcessListInitExpression(ListInitExpression expression, ListInitExpressionNode expressionNode, NodeStack stack)
         {
-
+            expressionNode.Initializers = NewAndStack<ElementInitNodeList>(expression.Initializers, stack);
+            expressionNode.NewExpression = NewAndStack<NewExpressionNode>(expression.NewExpression, stack);
         }
-        private void ProcessListInit(ListInitExpression expression, ListInitExpressionNode expressionNode, NodeStack stack)
+        private void ProcessMemberExpression(MemberExpression expression, MemberExpressionNode expressionNode, NodeStack stack)
         {
-
+            expressionNode.Expression = NewAndStack<ExpressionNode>(expression.Expression, stack);
+            expressionNode.Member = NewAndStack<MemberInfoNode>(expression.Member, stack);
         }
-        private void ProcessMember(MemberExpression expression, MemberExpressionNode expressionNode, NodeStack stack)
+        private void ProcessMemberInitExpression(MemberInitExpression expression, MemberInitExpressionNode expressionNode, NodeStack stack)
         {
-
+            expressionNode.Bindings = NewAndStack<MemberBindingNodeList>(expression.Bindings, stack);
+            expressionNode.NewExpression = NewAndStack<NewExpressionNode>(expression.NewExpression, stack);
         }
-        private void ProcessMemberInit(MemberInitExpression expression, MemberInitExpressionNode expressionNode, NodeStack stack)
+        private void ProcessMethodCallExpression(MethodCallExpression expression, MethodCallExpressionNode expressionNode, NodeStack stack)
         {
-
+            expressionNode.Arguments = NewAndStack<ExpressionNodeList>(expression.Arguments, stack);
+            expressionNode.Method = NewAndStack<MethodInfoNode>(expression.Method, stack);
+            expressionNode.Object = NewAndStack<ExpressionNode>(expression.Object, stack);
         }
-        private void ProcessMethodCall(MethodCallExpression expression, MethodCallExpressionNode expressionNode, NodeStack stack)
+        private void ProcessNewArrayExpression(NewArrayExpression expression, NewArrayExpressionNode expressionNode, NodeStack stack)
         {
-
+            expressionNode.Expressions = NewAndStack<ExpressionNodeList>(expression.Expressions, stack);
         }
-        private void ProcessNewArray(NewArrayExpression expression, NewArrayExpressionNode expressionNode, NodeStack stack)
+        private void ProcessNewExpression(NewExpression expression, NewExpressionNode expressionNode, NodeStack stack)
         {
-
+            expressionNode.Arguments = NewAndStack<ExpressionNodeList>(expression.Arguments, stack);
+            expressionNode.Constructor = NewAndStack<ConstructorInfoNode>(expression.Constructor, stack);
+            expressionNode.Members = NewAndStack<MemberInfoNodeList>(expression.Members, stack);
         }
-        private void ProcessNew(NewExpression expression, NewExpressionNode expressionNode, NodeStack stack)
-        {
 
+        private void ProcessParameterExpression(ParameterExpression expression, ParameterExpressionNode expressionNode, NodeStack stack)
+        {
+#if !WINDOWS_PHONE7
+            expressionNode.IsByRef = expression.IsByRef;
+#else
+            expressionNode.IsByRef = false;
+#endif
+            expressionNode.Name = expression.Name;
         }
-        private void ProcessParameter(ParameterExpression expression, ParameterExpressionNode expressionNode, NodeStack stack)
-        {
 
+        private void ProcessType(Type type, TypeNode typeNode, NodeStack stack)
+        {
+            object current = null;
+            Node currentNode = null;
+            do
+            {
+                if (current != null)
+                {
+                    if (!(current is Type))
+                        break;
+                    stack.TryPop(out current, out currentNode);
+                    type = (Type) current;
+                    typeNode = (TypeNode) currentNode;
+                }
+
+                var isAnonymousType = Attribute.IsDefined(type, typeof(CompilerGeneratedAttribute), false)
+                    && type.IsGenericType && type.Name.Contains("AnonymousType")
+                    && (type.Name.StartsWith("<>") || type.Name.StartsWith("VB$"))
+                    && (type.Attributes & TypeAttributes.NotPublic) == TypeAttributes.NotPublic;
+
+                if (type.IsGenericType)
+                {
+                    var argTypes = type.GetGenericArguments();
+
+                    typeNode.GenericArguments = new TypeNode[argTypes.Length];
+                    for (var i = 0; i < argTypes.Length; ++i)
+                        typeNode.GenericArguments[i] = NewAndStack<TypeNode>(argTypes[i], stack);
+                    type = type.GetGenericTypeDefinition();
+                }
+
+                if (isAnonymousType || !_factorySettings.UseRelaxedTypeNames)
+                    typeNode.Name = type.AssemblyQualifiedName;
+                else
+                    typeNode.Name = type.FullName;
+                
+            } 
+            while (stack.TryPeek(out current, out currentNode));
         }
-        private void ProcessTypeBinary(TypeBinaryExpression expression, TypeBinaryExpressionNode expressionNode, NodeStack stack)
-        {
 
+        private void ProcessTypeBinaryExpression(TypeBinaryExpression expression, TypeBinaryExpressionNode expressionNode, NodeStack stack)
+        {
+            expressionNode.Expression = NewAndStack<ExpressionNode>(expression.Expression, stack);
+            expressionNode.TypeOperand = NewAndStack<TypeNode>(expression.TypeOperand, stack);
         }
-        private void ProcessUnary(UnaryExpression expression, UnaryExpressionNode expressionNode, NodeStack stack)
+        private void ProcessUnaryExpression(UnaryExpression expression, UnaryExpressionNode expressionNode, NodeStack stack)
         {
+            expressionNode.Operand = NewAndStack<ExpressionNode>(expression.Operand, stack);
+        }
 
+        private static TNode NewAndStack<TNode>(object obj, NodeStack stack) where TNode : Node
+        {
+            var retval = (TNode) New(obj);
+            stack.Push(obj, retval);
+            return retval;
         }
 
         private static Node New(object obj)
@@ -222,9 +293,20 @@ namespace Serialize.Linq.Factories
             if (obj is ParameterExpression) return new ParameterExpressionNode();
             if (obj is TypeBinaryExpression) return new TypeBinaryExpressionNode();
             if (obj is UnaryExpression) return new UnaryExpressionNode();
-
-
-
+            if (obj is Type) return new TypeNode();
+            if (obj is ElementInit) return new ElementInitNode();
+            if (obj is IEnumerable<ElementInit>) return new ElementInitNodeList();
+            if (obj is FieldInfo) return new FieldInfoNode();
+            if (obj is PropertyInfo) return new PropertyInfoNode();
+            if (obj is MethodInfo) return new MethodInfoNode();
+            if (obj is ConstructorInfo) return new ConstructorInfoNode();
+            if (obj is MemberMemberBinding) return new MemberMemberBindingNode();
+            if (obj is MemberListBinding) return new MemberListBindingNode();
+            if (obj is MemberAssignment) return new MemberAssignmentNode();
+            if (obj is IEnumerable<MemberBinding>) return new MemberBindingNodeList();
+            if (obj is MemberInfo) return new MemberInfoNode();
+            if (obj is IEnumerable<MemberInfo>) return new MemberInfoNodeList();
+            
             throw new ArgumentException("Cannot create node from object of type " + obj.GetType());
         }
     }

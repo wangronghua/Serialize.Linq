@@ -25,10 +25,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class ParameterExpressionNode : ExpressionNode<ParameterExpression>
+    public class ParameterExpressionNode : ExpressionNode
     {
         public ParameterExpressionNode()
-            : base(Nodes.NodeKind.Parameter) { }
+            : base(NodeKind.ParameterExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -48,16 +48,6 @@ namespace Serialize.Linq.Nodes
 #endif
         #endregion
         public string Name { get; set; }
-
-        protected override void Initialize(ParameterExpression expression)
-        {
-#if !WINDOWS_PHONE7
-            this.IsByRef = expression.IsByRef;
-#else
-            this.IsByRef = false;
-#endif
-            this.Name = expression.Name;
-        }
 
         public override Expression ToExpression(ExpressionContext context)
         {

@@ -9,7 +9,6 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -23,10 +22,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class UnaryExpressionNode : ExpressionNode<UnaryExpression>
+    public class UnaryExpressionNode : ExpressionNode
     {
         public UnaryExpressionNode()
-            : base(Nodes.NodeKind.Unary) { }
+            : base(NodeKind.UnaryExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -36,11 +35,6 @@ namespace Serialize.Linq.Nodes
 #endif
         #endregion
         public ExpressionNode Operand { get; set; }
-
-        protected override void Initialize(UnaryExpression expression)
-        {
-            this.Operand = this.Factory.CreateExpressionNode(expression.Operand);
-        }
 
         public override Expression ToExpression(ExpressionContext context)
         {

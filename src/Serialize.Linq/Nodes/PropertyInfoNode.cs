@@ -34,10 +34,8 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class PropertyInfoNode : MemberNode<PropertyInfo>
     {
-        public PropertyInfoNode() { }
-
-        public PropertyInfoNode(INodeFactory factory, PropertyInfo memberInfo) 
-            : base(factory, memberInfo) { }
+        public PropertyInfoNode()
+            : base(NodeKind.PropertyInfo) { }
 
         protected override IEnumerable<PropertyInfo> GetMemberInfosForType(Type type)
         {

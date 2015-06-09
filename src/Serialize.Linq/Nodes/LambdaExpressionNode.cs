@@ -50,16 +50,6 @@ namespace Serialize.Linq.Nodes
         #endregion
         public ExpressionNodeList Parameters { get; set; }
 
-        protected override void Initialize(LambdaExpression expression)
-        {
-#if !WINDOWS_PHONE7
-            this.Parameters = new ExpressionNodeList(this.Factory, expression.Parameters);
-#else
-            this.Parameters = new ExpressionNodeList(this.Factory, expression.Parameters.Select(p => (Expression)p));
-#endif
-            this.Body = this.Factory.CreateExpressionNode(expression.Body);
-        }
-
         public override Expression ToExpression(ExpressionContext context)
         {
             var body = this.Body.ToExpression(context);

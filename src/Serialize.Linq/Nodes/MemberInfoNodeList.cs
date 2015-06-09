@@ -25,17 +25,19 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class MemberInfoNodeList : List<MemberInfoNode>
+    public class MemberInfoNodeList : NodeList<MemberInfoNode>
     {
-        public MemberInfoNodeList() { }
+        public MemberInfoNodeList()
+            : base(NodeKind.MemberInfoList) { }
 
+        /*
         public MemberInfoNodeList(INodeFactory factory, IEnumerable<MemberInfo> items = null)
         {
             if (factory == null)
                 throw new ArgumentNullException("factory");
             if(items != null)
                 this.AddRange(items.Select(m => new MemberInfoNode(factory, m)));
-        }
+        }*/
 
         public IEnumerable<MemberInfo> GetMembers(ExpressionContext context)
         {

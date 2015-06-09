@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -25,10 +24,12 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class ElementInitNodeList : List<ElementInitNode>
+    public class ElementInitNodeList : NodeList<ElementInitNode>
     {
-        public ElementInitNodeList() { }
+        public ElementInitNodeList() 
+            : base(NodeKind.ElementInitList) { }
 
+        /*
         public ElementInitNodeList(INodeFactory factory, IEnumerable<ElementInit> items)
         {
             if (factory == null)
@@ -36,7 +37,7 @@ namespace Serialize.Linq.Nodes
             if (items == null)
                 throw new ArgumentNullException("items");
             this.AddRange(items.Select(item => new ElementInitNode(factory, item)));
-        }
+        }*/
 
         internal IEnumerable<ElementInit> GetElementInits(ExpressionContext context)
         {

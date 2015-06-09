@@ -9,7 +9,6 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -23,10 +22,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class MemberInitExpressionNode : ExpressionNode<MemberInitExpression>
+    public class MemberInitExpressionNode : ExpressionNode
     {
         public MemberInitExpressionNode()
-            : base(Nodes.NodeKind.MemberInit) { }
+            : base(NodeKind.MemberInitExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -45,12 +44,6 @@ namespace Serialize.Linq.Nodes
 #endif
         #endregion
         public NewExpressionNode NewExpression { get; set; }
-
-        protected override void Initialize(MemberInitExpression expression)
-        {
-            this.Bindings = new MemberBindingNodeList(this.Factory, expression.Bindings);
-            this.NewExpression = (NewExpressionNode)this.Factory.CreateExpressionNode(expression.NewExpression);
-        }
 
         public override Expression ToExpression(ExpressionContext context)
         {

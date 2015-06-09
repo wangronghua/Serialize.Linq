@@ -9,7 +9,6 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -24,10 +23,10 @@ namespace Serialize.Linq.Nodes
 #endif
 
     #endregion
-    public class TypeBinaryExpressionNode : ExpressionNode<TypeBinaryExpression>
+    public class TypeBinaryExpressionNode : ExpressionNode
     {
         public TypeBinaryExpressionNode()
-            : base(Nodes.NodeKind.TypeBinary) { }
+            : base(NodeKind.TypeBinaryExpression) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -46,13 +45,6 @@ namespace Serialize.Linq.Nodes
 #endif
         #endregion
         public TypeNode TypeOperand { get; set; }
-
-
-        protected override void Initialize(TypeBinaryExpression expression)
-        {
-            this.Expression = this.Factory.CreateExpressionNode(expression.Expression);
-            this.TypeOperand = this.Factory.CreateTypeNode(expression.TypeOperand);
-        }
 
         public override Expression ToExpression(ExpressionContext context)
         {

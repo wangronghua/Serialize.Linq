@@ -25,13 +25,15 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class MemberListBindingNode : MemberBindingNode
     {
-        public MemberListBindingNode() { }
+        public MemberListBindingNode()
+            : base(NodeKind.MemberListBinding) { }
 
+        /*
         public MemberListBindingNode(INodeFactory factory, MemberListBinding memberListBinding)
             : base(factory, memberListBinding.BindingType, memberListBinding.Member)
         {
             this.Initializers = new ElementInitNodeList(this.Factory, memberListBinding.Initializers);
-        }
+        }*/
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

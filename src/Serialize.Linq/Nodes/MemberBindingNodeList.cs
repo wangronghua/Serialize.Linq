@@ -25,10 +25,12 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class MemberBindingNodeList : List<MemberBindingNode>
+    public class MemberBindingNodeList : NodeList<MemberBindingNode>
     {
-        public MemberBindingNodeList() { }
+        public MemberBindingNodeList()
+            : base(NodeKind.MemberBindingList) { }
 
+        /*
         public MemberBindingNodeList(INodeFactory factory, IEnumerable<MemberBinding> items)
         {
             if (factory == null)
@@ -36,7 +38,7 @@ namespace Serialize.Linq.Nodes
             if (items == null)
                 throw new ArgumentNullException("items");
             this.AddRange(items.Select(m => MemberBindingNode.Create(factory, m)));
-        }
+        }*/
 
         internal IEnumerable<MemberBinding> GetMemberBindings(ExpressionContext context)
         {

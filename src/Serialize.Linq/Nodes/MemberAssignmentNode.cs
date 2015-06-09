@@ -25,13 +25,15 @@ namespace Serialize.Linq.Nodes
     #endregion
     public class MemberAssignmentNode : MemberBindingNode
     {
-        public MemberAssignmentNode() { }
+        public MemberAssignmentNode()
+            : base(NodeKind.MemberAssignment) { }
 
+        /*
         public MemberAssignmentNode(INodeFactory factory, MemberAssignment memberAssignment)
             : base(factory, memberAssignment.BindingType, memberAssignment.Member)
         {
             this.Expression = this.Factory.CreateExpressionNode(memberAssignment.Expression);
-        }
+        }*/
 
         #region DataMember
         #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

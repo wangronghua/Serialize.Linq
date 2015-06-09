@@ -9,7 +9,6 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -44,13 +43,7 @@ namespace Serialize.Linq.Nodes
         [DataMember(EmitDefaultValue = false, Name = "N")]
 #endif
         #endregion
-        public ExpressionNode NewExpression { get; set; }
-
-        protected override void Initialize(ListInitExpression expression)
-        {
-            this.Initializers = new ElementInitNodeList(this.Factory, expression.Initializers);
-            this.NewExpression = this.Factory.CreateExpressionNode(expression.NewExpression);
-        }
+        public NewExpressionNode NewExpression { get; set; }
 
         public override Expression ToExpression(ExpressionContext context)
         {

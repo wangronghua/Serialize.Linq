@@ -56,13 +56,6 @@ namespace Serialize.Linq.Nodes
         #endregion
         public ExpressionNode Object { get; set; }
 
-        protected override void Initialize(MethodCallExpression expression)
-        {
-            this.Arguments = new ExpressionNodeList(this.Factory, expression.Arguments);
-            this.Method = new MethodInfoNode(this.Factory, expression.Method);
-            this.Object = this.Factory.CreateExpressionNode(expression.Object);
-        }
-
         public override Expression ToExpression(ExpressionContext context)
         {
             Expression objectExpression = null;

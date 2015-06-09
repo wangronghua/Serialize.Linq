@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Serialize.Linq.Internals;
 using Serialize.Linq.Nodes;
 
 namespace Serialize.Linq.Factories
@@ -194,18 +195,14 @@ namespace Serialize.Linq.Factories
             return base.CreateExpressionNode(methodCallExpression);
         }
 
-        /// <summary>
-        /// Creates the specified expression.
-        /// </summary>
-        /// <param name="expression">The expression.</param>
-        /// <returns></returns>
-        public override ExpressionNode CreateExpressionNode(Expression expression)
+        protected override void ProcessExpression(Expression expression, ExpressionNode expressionNode, NodeStack stack)
         {
+            base.ProcessExpression(expression, expressionNode, stack);
             if (expression is MemberExpression)
                 return this.ResolveMemberExpression(expression as MemberExpression);
             if (expression is MethodCallExpression)
                 return this.ResolveMethodCallExpression(expression as MethodCallExpression);
-            return base.CreateExpressionNode(expression);
+            base.ProcessExpression(expression, expressionNode, stack);
         }
     }
 }

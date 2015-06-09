@@ -55,23 +55,11 @@ namespace Serialize.Linq.Factories
         }
 
         /// <summary>
-        /// Creates the specified expression node an expression.
+        /// Creates a new node from the given object.
         /// </summary>
-        /// <param name="expression">The expression.</param>
-        /// <returns></returns>
-        public ExpressionNode CreateExpressionNode(Expression expression)
+        public Node CreateNode(object root)
         {
-            return _innerFactory.CreateExpressionNode(expression);
-        }
-
-        /// <summary>
-        /// Creates the specified type node from a type.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns></returns>
-        public TypeNode CreateTypeNode(Type type)
-        {
-            return _innerFactory.CreateTypeNode(type);
+            return _innerFactory.CreateNode(root);
         }
 
         /// <summary>
