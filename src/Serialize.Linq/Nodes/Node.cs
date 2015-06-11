@@ -23,7 +23,7 @@ namespace Serialize.Linq.Nodes
         MemberMemberBinding, MemberListBinding, MemberAssignment, MemberBindingList
     }
 
-    #region DataContract
+#region DataContract
     [DataContract]
 #if !SILVERLIGHT
     [Serializable]
@@ -45,6 +45,7 @@ namespace Serialize.Linq.Nodes
     [KnownType(typeof(MemberBindingNode))]
     [KnownType(typeof(MemberBindingNodeList))]
     [KnownType(typeof(MemberExpressionNode))]
+    [KnownType(typeof(MemberNode))]
     [KnownType(typeof(MemberInfoNode))]
     [KnownType(typeof(MemberInfoNodeList))]    
     [KnownType(typeof(MemberInitExpressionNode))]

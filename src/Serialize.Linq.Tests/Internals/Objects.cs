@@ -6,6 +6,8 @@
 //  Contributing: https://github.com/esskar/Serialize.Linq
 #endregion
 
+using System.Runtime.Serialization;
+
 namespace Serialize.Linq.Tests.Internals
 {
     public interface IFoo
@@ -34,6 +36,7 @@ namespace Serialize.Linq.Tests.Internals
         }
     }
 
+    [DataContract]
     public class Fish
     {
         public int? Count { get; set; }

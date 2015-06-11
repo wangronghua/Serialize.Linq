@@ -80,11 +80,20 @@ namespace Serialize.Linq.Factories
                     this.ProcessType((Type)obj, (TypeNode)node, stack);
                     break;
 
-                case NodeKind.ConstructorInfo:
-                case NodeKind.FieldInfo:
-                case NodeKind.MemberInfo:
                 case NodeKind.PropertyInfo:
-                    this.ProcessMemberInfo((MemberInfo)obj, (MemberInfoNode)node, stack);
+                    this.ProcessMemberInfo((MemberInfo)obj, (MemberNode)node, stack);
+                    break;
+
+                case NodeKind.ConstructorInfo:
+                    this.ProcessMemberInfo((MemberInfo)obj, (MemberNode)node, stack);
+                    break;
+
+                case NodeKind.FieldInfo:
+                    this.ProcessMemberInfo((MemberInfo)obj, (MemberNode)node, stack);
+                    break;
+                
+                case NodeKind.MemberInfo:
+                    this.ProcessMemberInfo((MemberInfo)obj, (MemberNode)node, stack);
                     break;
 
                 case NodeKind.MethodInfo:
@@ -194,7 +203,7 @@ namespace Serialize.Linq.Factories
             NodeStack stack)
         {
             foreach (var member in members)
-                infoNodeList.Add(NewAndStack<MemberInfoNode>(member, stack));
+                infoNodeList.Add(NewAndStack<MemberNode>(member, stack));
         }
 
         private void ProcessMemberBindingList(IEnumerable<MemberBinding> bindings, MemberBindingNodeList bindingNodeList,
@@ -224,7 +233,7 @@ namespace Serialize.Linq.Factories
             elementInitNode.Arguments = NewAndStack<ExpressionNodeList>(elementInit.Arguments, stack);
         }
 
-        private void ProcessMemberInfo(MemberInfo member, MemberInfoNode memberNode, NodeStack stack)
+        private void ProcessMemberInfo(MemberInfo member, MemberNode memberNode, NodeStack stack)
         {
             memberNode.DeclaringType = NewAndStack<TypeNode>(member.DeclaringType, stack);
             memberNode.Signature = member.ToString();
@@ -252,21 +261,21 @@ namespace Serialize.Linq.Factories
         private void ProcessMemberAssignment(MemberAssignment assignment, MemberAssignmentNode assignmentNode,
             NodeStack stack)
         {
-            assignmentNode.Member = NewAndStack<MemberInfoNode>(assignment.Member, stack);
+            assignmentNode.Member = NewAndStack<MemberNode>(assignment.Member, stack);
             assignmentNode.Expression = NewAndStack<ExpressionNode>(assignment.Expression, stack);
         }
 
         private void ProcessMemberListBinding(MemberListBinding listBinding, MemberListBindingNode listBindingNode,
             NodeStack stack)
         {
-            listBindingNode.Member = NewAndStack<MemberInfoNode>(listBinding.Member, stack);
+            listBindingNode.Member = NewAndStack<MemberNode>(listBinding.Member, stack);
             listBindingNode.Initializers = NewAndStack<ElementInitNodeList>(listBinding.Initializers, stack);
         }
 
         private void ProcessMemberMemberBinding(MemberMemberBinding memberBinding,
             MemberMemberBindingNode memberBindingNode, NodeStack stack)
         {
-            memberBindingNode.Member = NewAndStack<MemberInfoNode>(memberBinding.Member, stack);
+            memberBindingNode.Member = NewAndStack<MemberNode>(memberBinding.Member, stack);
             memberBindingNode.Bindings = NewAndStack<MemberBindingNodeList>(memberBinding.Bindings, stack);
         }
 
@@ -317,7 +326,7 @@ namespace Serialize.Linq.Factories
         private void ProcessMemberExpression(MemberExpression expression, MemberExpressionNode expressionNode, NodeStack stack)
         {
             expressionNode.Expression = NewAndStack<ExpressionNode>(expression.Expression, stack);
-            expressionNode.Member = NewAndStack<MemberInfoNode>(expression.Member, stack);
+            expressionNode.Member = NewAndStack<MemberNode>(expression.Member, stack);
         }
         private void ProcessMemberInitExpression(MemberInitExpression expression, MemberInitExpressionNode expressionNode, NodeStack stack)
         {
@@ -403,7 +412,8 @@ namespace Serialize.Linq.Factories
         internal virtual TNode NewAndStack<TNode>(object obj, NodeStack stack) where TNode : Node
         {
             var retval = (TNode) New(obj);
-            stack.Push(obj, retval);
+            if (retval != null)
+                stack.Push(obj, retval);
             return retval;
         }
 
@@ -431,8 +441,8 @@ namespace Serialize.Linq.Factories
             if (obj is ElementInit) return new ElementInitNode();
             if (obj is FieldInfo) return new FieldInfoNode();
             if (obj is PropertyInfo) return new PropertyInfoNode();
-            if (obj is MethodInfo) return new MethodInfoNode();
             if (obj is ConstructorInfo) return new ConstructorInfoNode();
+            if (obj is MethodInfo) return new MethodInfoNode();
             if (obj is MemberMemberBinding) return new MemberMemberBindingNode();
             if (obj is MemberListBinding) return new MemberListBindingNode();
             if (obj is MemberAssignment) return new MemberAssignmentNode();

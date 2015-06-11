@@ -8,6 +8,7 @@
 
 using System;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Serialize.Linq.Nodes
@@ -118,14 +119,14 @@ namespace Serialize.Linq.Nodes
                     this.NodeType,
                     this.Left.ToExpression(context), this.Right.ToExpression(context),
                     this.IsLiftedToNull,
-                    this.Method.ToMemberInfo(context),
+                    (MethodInfo)this.Method.ToMemberInfo(context),
                     conversion);
             if (this.Method != null)
                 return Expression.MakeBinary(
                     this.NodeType,
                     this.Left.ToExpression(context), this.Right.ToExpression(context),
                     this.IsLiftedToNull,
-                    this.Method.ToMemberInfo(context));
+                    (MethodInfo)this.Method.ToMemberInfo(context));
             return Expression.MakeBinary(this.NodeType,
                     this.Left.ToExpression(context), this.Right.ToExpression(context));
         }

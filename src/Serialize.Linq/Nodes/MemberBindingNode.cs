@@ -56,7 +56,7 @@ namespace Serialize.Linq.Nodes
         [DataMember(EmitDefaultValue = false, Name = "M")]
 #endif
         #endregion
-        public MemberInfoNode Member { get; set; }
+        public MemberNode Member { get; set; }
 
         internal abstract MemberBinding ToMemberBinding(ExpressionContext context);
     }

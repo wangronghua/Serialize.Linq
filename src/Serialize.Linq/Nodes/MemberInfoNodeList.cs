@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -25,19 +24,10 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class MemberInfoNodeList : NodeList<MemberInfoNode>
+    public class MemberInfoNodeList : NodeList<MemberNode>
     {
         public MemberInfoNodeList()
             : base(NodeKind.MemberInfoList) { }
-
-        /*
-        public MemberInfoNodeList(INodeFactory factory, IEnumerable<MemberInfo> items = null)
-        {
-            if (factory == null)
-                throw new ArgumentNullException("factory");
-            if(items != null)
-                this.AddRange(items.Select(m => new MemberInfoNode(factory, m)));
-        }*/
 
         public IEnumerable<MemberInfo> GetMembers(ExpressionContext context)
         {

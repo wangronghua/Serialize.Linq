@@ -17,25 +17,22 @@ namespace Serialize.Linq.Nodes
 {
     #region DataContract
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
-    #if SERIALIZE_LINQ_BORKED_VERION
+#if SERIALIZE_LINQ_BORKED_VERION
     [DataContract]
-    #else
-    [DataContract(Name = "MemberNodeGeneric")]
-    #endif
 #else
-    [DataContract(Name = "MN")]
+    [DataContract]
+#endif
+#else
+    [DataContract]
 #endif
 #if !SILVERLIGHT
     [Serializable]
 #endif
     #endregion
-    public abstract class MemberNode<TMemberInfo> : Node where TMemberInfo : MemberInfo
+    public abstract class MemberNode : Node
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MemberNode{TMemberInfo}"/> class.
-        /// </summary>
-        protected MemberNode(NodeKind nodeKind)
-            : base (nodeKind) { }
+        protected  MemberNode(NodeKind nodeKind)
+            : base(nodeKind) { }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -87,30 +84,57 @@ namespace Serialize.Linq.Nodes
         }
 
         /// <summary>
+        /// Converts this instance to a member info object of type TMemberInfo.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns></returns>
+        public abstract MemberInfo ToMemberInfo(ExpressionContext context);
+    }
+
+    #region DataContract
+#if !SERIALIZE_LINQ_OPTIMIZE_SIZE
+    #if SERIALIZE_LINQ_BORKED_VERION
+    [DataContract]
+    #else
+    [DataContract(Name = "MemberNodeGeneric")]
+    #endif
+#else
+    [DataContract(Name = "MN")]
+#endif
+#if !SILVERLIGHT
+    [Serializable]
+#endif
+    #endregion
+    public abstract class MemberNode<TMemberInfo> : MemberNode where TMemberInfo : MemberInfo
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MemberNode{TMemberInfo}"/> class.
+        /// </summary>
+        protected MemberNode(NodeKind nodeKind)
+            : base (nodeKind) { }
+
+        /// <summary>
         /// Converts this instance to an expression.
         /// </summary>
         /// <param name="type">The type.</param>
         /// <returns></returns>
         protected abstract IEnumerable<TMemberInfo> GetMemberInfosForType(Type type);
 
-        /// <summary>
-        /// Converts this instance to a member info object of type TMemberInfo.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns></returns>
-        public virtual TMemberInfo ToMemberInfo(ExpressionContext context)
+        public override MemberInfo ToMemberInfo(ExpressionContext context)
         {
-            if (string.IsNullOrWhiteSpace(this.Signature))
-                return null;
+            {
+                if (string.IsNullOrWhiteSpace(this.Signature))
+                    return null;
 
-            var declaringType = this.GetDeclaringType(context);
-            var members = this.GetMemberInfosForType(declaringType);
+                var declaringType = this.GetDeclaringType(context);
+                var members = this.GetMemberInfosForType(declaringType);
 
-            var member = members.FirstOrDefault(m => m.ToString() == this.Signature);
-            if (member == null)
-                throw new MemberNotFoundException("MemberInfo not found. See DeclaringType and MemberSignature properties for more details.", 
-                    declaringType, this.Signature);
-            return member;
+                var member = members.FirstOrDefault(m => m.ToString() == this.Signature);
+                if (member == null)
+                    throw new MemberNotFoundException("MemberInfo not found. See DeclaringType and MemberSignature properties for more details.",
+                        declaringType, this.Signature);
+                return member;
+            }
         }
     }
 }

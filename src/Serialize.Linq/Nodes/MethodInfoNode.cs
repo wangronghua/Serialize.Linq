@@ -52,9 +52,9 @@ namespace Serialize.Linq.Nodes
         #endregion
         public TypeNode[] GenericArguments { get; set; }
 
-        public override MethodInfo ToMemberInfo(ExpressionContext context)
+        public override MemberInfo ToMemberInfo(ExpressionContext context)
         {
-            var method = base.ToMemberInfo(context);
+            var method = (MethodInfo)base.ToMemberInfo(context);
             if (method == null)
                 return null;
 

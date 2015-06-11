@@ -9,6 +9,7 @@
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
 
@@ -61,7 +62,7 @@ namespace Serialize.Linq.Nodes
             if (this.Constructor == null)
                 return Expression.New(this.Type.ToType(context));
 
-            var constructor = this.Constructor.ToMemberInfo(context);
+            var constructor = (ConstructorInfo)this.Constructor.ToMemberInfo(context);
             if (constructor == null)
                 return Expression.New(this.Type.ToType(context));
 
