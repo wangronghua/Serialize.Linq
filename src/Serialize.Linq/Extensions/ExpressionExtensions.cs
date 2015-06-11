@@ -123,7 +123,7 @@ namespace Serialize.Linq.Extensions
             if(serializer == null)
                 throw new ArgumentNullException("serializer");
 
-            return serializer.Serialize(factory.CreateExpressionNode(expression));
+            return serializer.Serialize(factory.CreateNode(expression));
         }
 
         /// <summary>

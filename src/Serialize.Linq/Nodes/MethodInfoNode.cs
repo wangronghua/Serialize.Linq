@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -52,17 +51,6 @@ namespace Serialize.Linq.Nodes
 #endif
         #endregion
         public TypeNode[] GenericArguments { get; set; }
-
-        protected override void Initialize(MethodInfo memberInfo)
-        {
-            base.Initialize(memberInfo);
-            if (!memberInfo.IsGenericMethod)
-                return;
-
-            this.IsGenericMethod = true;
-            this.Signature = memberInfo.GetGenericMethodDefinition().ToString();
-            this.GenericArguments = memberInfo.GetGenericArguments().Select(a => this.Factory.CreateTypeNode(a)).ToArray();
-        }
 
         public override MethodInfo ToMemberInfo(ExpressionContext context)
         {

@@ -12,7 +12,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Serialize.Linq.Exceptions;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -67,16 +66,6 @@ namespace Serialize.Linq.Nodes
 #endif
         #endregion
         public string Signature { get; set; }
-
-        /// <summary>
-        /// Initializes the instance using specified member info.
-        /// </summary>
-        /// <param name="memberInfo">The member info.</param>
-        protected virtual void Initialize(TMemberInfo memberInfo)
-        {
-            this.DeclaringType = _typeNodeFactory.CreateTypeNode(memberInfo.DeclaringType);
-            this.Signature = memberInfo.ToString();
-        }
 
         /// <summary>
         /// Gets the the declaring type.

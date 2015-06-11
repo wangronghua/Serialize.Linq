@@ -9,7 +9,6 @@
 using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
 
 namespace Serialize.Linq.Nodes
 {
@@ -30,19 +29,6 @@ namespace Serialize.Linq.Nodes
         /// </summary>
         public ElementInitNode()
             : base (NodeKind.ElementInit) { }
-        /// <summary>
-        /// Initializes the specified element init.
-        /// </summary>
-        /// <param name="elementInit">The element init.</param>
-        /// <exception cref="System.ArgumentNullException">elementInit</exception>
-        private void Initialize(ElementInit elementInit)
-        {
-            if (elementInit == null)
-                throw new ArgumentNullException("elementInit");
-
-            this.AddMethod = new MethodInfoNode(this.Factory, elementInit.AddMethod);
-            this.Arguments = new ExpressionNodeList(_expressionNodeFactory, elementInit.Arguments);
-        }
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

@@ -128,9 +128,6 @@ namespace Serialize.Linq.Factories
         /// <summary>
         /// Tries to inline an expression.
         /// </summary>
-        /// <param name="memberExpression">The member expression.</param>
-        /// <param name="inlineExpression">The inline expression.</param>
-        /// <returns></returns>
         private bool TryToInlineExpression(MemberExpression memberExpression, out Expression inlineExpression)
         {
             inlineExpression = null;
@@ -153,20 +150,18 @@ namespace Serialize.Linq.Factories
         /// <summary>
         /// Resolves the member expression.
         /// </summary>
-        /// <param name="memberExpression">The member expression.</param>
-        /// <returns></returns>
-        private ExpressionNode ResolveMemberExpression(MemberExpression memberExpression)
+        private Node ResolveMemberExpression(MemberExpression memberExpression, NodeStack stack)
         {
             Expression inlineExpression;
             if (this.TryToInlineExpression(memberExpression, out inlineExpression))
-                return this.CreateExpressionNode(inlineExpression);
+                return this.CreateNode(inlineExpression, stack);
 
             object constantValue;
             Type constantValueType;
 
             return this.TryGetConstantValueFromMemberExpression(memberExpression, out constantValue, out constantValueType)
-                ? new ConstantExpressionNode(this, constantValue, constantValueType)
-                : base.CreateExpressionNode(memberExpression);
+                ? this.CreateConstantExpressionNode(constantValue, constantValueType, stack)
+                : base.CreateNode(memberExpression, stack);
         }
 
         /// <summary>
@@ -174,7 +169,7 @@ namespace Serialize.Linq.Factories
         /// </summary>
         /// <param name="methodCallExpression">The method call expression.</param>
         /// <returns></returns>
-        private ExpressionNode ResolveMethodCallExpression(MethodCallExpression methodCallExpression)
+        private Node ResolveMethodCallExpression(MethodCallExpression methodCallExpression, NodeStack stack)
         {
             var memberExpression = methodCallExpression.Object as MemberExpression;
             if (memberExpression != null)
@@ -184,25 +179,43 @@ namespace Serialize.Linq.Factories
                 if (this.TryGetConstantValueFromMemberExpression(memberExpression, out constantValue, out constantValueType))
                 {
                     if (methodCallExpression.Arguments.Count == 0)
-                        return new ConstantExpressionNode(this, Expression.Lambda(methodCallExpression).Compile().DynamicInvoke());
+                    {
+                        constantValue = Expression.Lambda(methodCallExpression).Compile().DynamicInvoke();
+                        return this.CreateConstantExpressionNode(constantValue, stack);
+                    }
                 }
             }
             else if (methodCallExpression.Method.Name == "ToString" && methodCallExpression.Method.ReturnType == typeof(string))
             {
                 var constantValue = Expression.Lambda(methodCallExpression).Compile().DynamicInvoke();
-                return new ConstantExpressionNode(this, constantValue);
+                return this.CreateConstantExpressionNode(constantValue, stack);
             }
-            return base.CreateExpressionNode(methodCallExpression);
+            return base.CreateNode(methodCallExpression, stack);
         }
 
-        protected override void ProcessExpression(Expression expression, ExpressionNode expressionNode, NodeStack stack)
+        private ConstantExpressionNode CreateConstantExpressionNode(object value, NodeStack stack)
         {
-            base.ProcessExpression(expression, expressionNode, stack);
-            if (expression is MemberExpression)
-                return this.ResolveMemberExpression(expression as MemberExpression);
-            if (expression is MethodCallExpression)
-                return this.ResolveMethodCallExpression(expression as MethodCallExpression);
-            base.ProcessExpression(expression, expressionNode, stack);
+            return this.CreateConstantExpressionNode(value, value != null ? value.GetType() : null, stack);
+        }
+
+        private ConstantExpressionNode CreateConstantExpressionNode(object value, Type type, NodeStack stack)
+        {
+            var node = new ConstantExpressionNode
+            {
+                Value = value, 
+                Type = NewAndStack<TypeNode>(type, stack)
+            };
+            return node;
+        }
+
+        internal override Node CreateNode(object root, NodeStack stack)
+        {
+            if (root is MemberExpression)
+                return this.ResolveMemberExpression(root as MemberExpression, stack);
+            if (root is MethodCallExpression)
+                return this.ResolveMethodCallExpression(root as MethodCallExpression, stack);
+            
+            return base.CreateNode(root, stack);
         }
     }
 }

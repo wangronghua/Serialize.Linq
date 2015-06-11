@@ -43,23 +43,30 @@ namespace Serialize.Linq.Factories
 
         public Node CreateNode(object root)
         {
+            var stack = new NodeStack();
+            return this.CreateNode(root, stack);
+        }
+
+        virtual internal Node CreateNode(object root, NodeStack stack)
+        {
             if (root == null)
                 return null;
 
-            var rootNode = New(root);
-            var nodeStack = new NodeStack();
-            nodeStack.Push(root, rootNode);
+            var rootNode = NewAndStack<Node>(root, stack);
 
             object current;
             Node currentNode;
-            while (nodeStack.TryPop(out current, out currentNode))
-                this.Process(current, currentNode, nodeStack);
+            while (stack.TryPop(out current, out currentNode))
+                this.Process(current, currentNode, stack);
 
             return rootNode;
         }
-        
+
         private void Process(object obj, Node node, NodeStack stack)
         {
+            if (node == null)
+                return;
+
             var expression = obj as Expression;
             if (expression != null)
             {
@@ -72,10 +79,53 @@ namespace Serialize.Linq.Factories
                 case NodeKind.Type:
                     this.ProcessType((Type)obj, (TypeNode)node, stack);
                     break;
+
+                case NodeKind.ConstructorInfo:
+                case NodeKind.FieldInfo:
+                case NodeKind.MemberInfo:
+                case NodeKind.PropertyInfo:
+                    this.ProcessMemberInfo((MemberInfo)obj, (MemberInfoNode)node, stack);
+                    break;
+
+                case NodeKind.MethodInfo:
+                    this.ProcessMethodInfo((MethodInfo)obj, (MethodInfoNode)node, stack);
+                    break;
+                
+                case NodeKind.ElementInit:
+                    this.ProcessElementInit((ElementInit) obj, (ElementInitNode) node, stack);
+                    break;
+
+                case NodeKind.MemberAssignment:
+                    this.ProcessMemberAssignment((MemberAssignment)obj, (MemberAssignmentNode)node, stack);
+                    break;
+
+                case NodeKind.MemberListBinding:
+                    this.ProcessMemberListBinding((MemberListBinding)obj, (MemberListBindingNode)node, stack);
+                    break;
+
+                case NodeKind.MemberMemberBinding:
+                    this.ProcessMemberMemberBinding((MemberMemberBinding)obj, (MemberMemberBindingNode)node, stack);
+                    break;
+
+                case NodeKind.ElementInitList:
+                    this.ProcessElementInitList((IEnumerable<ElementInit>)obj, (ElementInitNodeList)node, stack);
+                    break;
+
+                case NodeKind.MemberBindingList:
+                    this.ProcessMemberBindingList((IEnumerable<MemberBinding>)obj, (MemberBindingNodeList)node, stack);
+                    break;
+
+                case NodeKind.MemberInfoList:
+                    this.ProcesMemberInfoList((IEnumerable<MemberInfo>) obj, (MemberInfoNodeList) node, stack);
+                    break;
+
+                case NodeKind.ExpressionList:
+                    this.ProcessExpressionNodeList((IEnumerable<Expression>)obj, (ExpressionNodeList)node, stack);
+                    break;
             }
         }
 
-        protected virtual void ProcessExpression(Expression expression, ExpressionNode expressionNode, NodeStack stack)
+        private void ProcessExpression(Expression expression, ExpressionNode expressionNode, NodeStack stack)
         {
             expressionNode.NodeType = expression.NodeType;
             expressionNode.Type = NewAndStack<TypeNode>(expression.Type, stack);
@@ -140,6 +190,86 @@ namespace Serialize.Linq.Factories
             }
         }
 
+        private void ProcesMemberInfoList(IEnumerable<MemberInfo> members, MemberInfoNodeList infoNodeList,
+            NodeStack stack)
+        {
+            foreach (var member in members)
+                infoNodeList.Add(NewAndStack<MemberInfoNode>(member, stack));
+        }
+
+        private void ProcessMemberBindingList(IEnumerable<MemberBinding> bindings, MemberBindingNodeList bindingNodeList,
+            NodeStack stack)
+        {
+            foreach (var binding in bindings)
+                bindingNodeList.Add(NewAndStack<MemberBindingNode>(binding, stack));
+        }
+
+        private void ProcessElementInitList(IEnumerable<ElementInit> elements, ElementInitNodeList elementInitNodeList,
+            NodeStack stack)
+        {
+            foreach (var element in elements)
+                elementInitNodeList.Add(NewAndStack<ElementInitNode>(element, stack));
+        }
+
+        private void ProcessExpressionNodeList(IEnumerable<Expression> expressions,
+            ExpressionNodeList expressionNodeList, NodeStack stack)
+        {
+            foreach (var expression in expressions)
+                expressionNodeList.Add(NewAndStack<ExpressionNode>(expression, stack));
+        }
+
+        private void ProcessElementInit(ElementInit elementInit, ElementInitNode elementInitNode, NodeStack stack)
+        {
+            elementInitNode.AddMethod = NewAndStack<MethodInfoNode>(elementInit.AddMethod, stack);
+            elementInitNode.Arguments = NewAndStack<ExpressionNodeList>(elementInit.Arguments, stack);
+        }
+
+        private void ProcessMemberInfo(MemberInfo member, MemberInfoNode memberNode, NodeStack stack)
+        {
+            memberNode.DeclaringType = NewAndStack<TypeNode>(member.DeclaringType, stack);
+            memberNode.Signature = member.ToString();
+        }
+
+        private void ProcessMethodInfo(MethodInfo method, MethodInfoNode methodNode, NodeStack stack)
+        {
+            methodNode.DeclaringType = NewAndStack<TypeNode>(method.DeclaringType, stack);
+            if (method.IsGenericMethod)
+            {
+                methodNode.IsGenericMethod = true;
+                methodNode.Signature = method.GetGenericMethodDefinition().ToString();
+
+                var arguments = method.GetGenericArguments();
+                methodNode.GenericArguments = new TypeNode[arguments.Length];
+                for (var i = 0; i < arguments.Length; ++i)
+                    methodNode.GenericArguments[i] = NewAndStack<TypeNode>(arguments[i], stack);
+            }
+            else
+            {
+                methodNode.Signature = method.ToString();    
+            }
+        }
+
+        private void ProcessMemberAssignment(MemberAssignment assignment, MemberAssignmentNode assignmentNode,
+            NodeStack stack)
+        {
+            assignmentNode.Member = NewAndStack<MemberInfoNode>(assignment.Member, stack);
+            assignmentNode.Expression = NewAndStack<ExpressionNode>(assignment.Expression, stack);
+        }
+
+        private void ProcessMemberListBinding(MemberListBinding listBinding, MemberListBindingNode listBindingNode,
+            NodeStack stack)
+        {
+            listBindingNode.Member = NewAndStack<MemberInfoNode>(listBinding.Member, stack);
+            listBindingNode.Initializers = NewAndStack<ElementInitNodeList>(listBinding.Initializers, stack);
+        }
+
+        private void ProcessMemberMemberBinding(MemberMemberBinding memberBinding,
+            MemberMemberBindingNode memberBindingNode, NodeStack stack)
+        {
+            memberBindingNode.Member = NewAndStack<MemberInfoNode>(memberBinding.Member, stack);
+            memberBindingNode.Bindings = NewAndStack<MemberBindingNodeList>(memberBinding.Bindings, stack);
+        }
+
         private void ProcessBinaryExpression(BinaryExpression expression, BinaryExpressionNode expressionNode, NodeStack stack)
         {
             expressionNode.Left = NewAndStack<ExpressionNode>(expression.Left, stack);
@@ -158,7 +288,7 @@ namespace Serialize.Linq.Factories
 
         private void ProcessConstantExpression(ConstantExpression expression, ConstantExpressionNode expressionNode, NodeStack stack)
         {
-
+            expressionNode.Value = expression.Value;
         }
 
         private void ProcessInvocationExpression(InvocationExpression expression, InvocationExpressionNode expressionNode, NodeStack stack)
@@ -270,7 +400,7 @@ namespace Serialize.Linq.Factories
             expressionNode.Operand = NewAndStack<ExpressionNode>(expression.Operand, stack);
         }
 
-        private static TNode NewAndStack<TNode>(object obj, NodeStack stack) where TNode : Node
+        internal virtual TNode NewAndStack<TNode>(object obj, NodeStack stack) where TNode : Node
         {
             var retval = (TNode) New(obj);
             stack.Push(obj, retval);
@@ -279,6 +409,9 @@ namespace Serialize.Linq.Factories
 
         private static Node New(object obj)
         {
+            if (obj == null)
+                return null;
+
             if (obj is BinaryExpression) return new BinaryExpressionNode();
             if (obj is ConditionalExpression) return new ConditionalExpressionNode();
             if (obj is ConstantExpression) return new ConstantExpressionNode();
@@ -293,9 +426,9 @@ namespace Serialize.Linq.Factories
             if (obj is ParameterExpression) return new ParameterExpressionNode();
             if (obj is TypeBinaryExpression) return new TypeBinaryExpressionNode();
             if (obj is UnaryExpression) return new UnaryExpressionNode();
+
             if (obj is Type) return new TypeNode();
             if (obj is ElementInit) return new ElementInitNode();
-            if (obj is IEnumerable<ElementInit>) return new ElementInitNodeList();
             if (obj is FieldInfo) return new FieldInfoNode();
             if (obj is PropertyInfo) return new PropertyInfoNode();
             if (obj is MethodInfo) return new MethodInfoNode();
@@ -303,9 +436,12 @@ namespace Serialize.Linq.Factories
             if (obj is MemberMemberBinding) return new MemberMemberBindingNode();
             if (obj is MemberListBinding) return new MemberListBindingNode();
             if (obj is MemberAssignment) return new MemberAssignmentNode();
-            if (obj is IEnumerable<MemberBinding>) return new MemberBindingNodeList();
             if (obj is MemberInfo) return new MemberInfoNode();
+            
+            if (obj is IEnumerable<ElementInit>) return new ElementInitNodeList();
+            if (obj is IEnumerable<MemberBinding>) return new MemberBindingNodeList();
             if (obj is IEnumerable<MemberInfo>) return new MemberInfoNodeList();
+            if (obj is IEnumerable<Expression>) return new ExpressionNodeList();
             
             throw new ArgumentException("Cannot create node from object of type " + obj.GetType());
         }
