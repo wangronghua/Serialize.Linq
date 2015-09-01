@@ -29,7 +29,7 @@ namespace Serialize.Linq.Nodes
         public MethodInfoNode()
             : base(NodeKind.MethodInfo) { }
 
-        protected override IEnumerable<MethodInfo> GetMemberInfosForType(Type type)
+        protected override IEnumerable<MethodInfo> GetMemberInfosForType(ExpressionContext context, Type type)
         {
             return type.GetMethods();
         }

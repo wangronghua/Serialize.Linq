@@ -6,6 +6,9 @@
 //  Contributing: https://github.com/esskar/Serialize.Linq
 #endregion
 
+using System;
+using System.Linq.Expressions;
+using System.Reflection;
 using Serialize.Linq.Factories;
 using Serialize.Linq.Nodes;
 
@@ -22,5 +25,10 @@ namespace Serialize.Linq.Interfaces
         /// Creates a new node from the given object.
         /// </summary>
         Node CreateNode(object root);
-    }    
+
+        /// <summary>
+        /// Gets binding flags to be used when accessing type members.
+        /// </summary>
+        BindingFlags? GetBindingFlags();
+    }
 }

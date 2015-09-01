@@ -86,10 +86,10 @@ namespace Serialize.Linq.Nodes
         /// <summary>
         /// Converts this instance to a member info object of type TMemberInfo.
         /// </summary>
-        /// <param name="context">The context.</param>
+        /// <param name="context">The expression context.</param>
+        /// <param name="type">The type.</param>
         /// <returns></returns>
-        public abstract MemberInfo ToMemberInfo(ExpressionContext context);
-    }
+        protected abstract IEnumerable<TMemberInfo> GetMemberInfosForType(ExpressionContext context, Type type);
 
     #region DataContract
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
@@ -120,14 +120,14 @@ namespace Serialize.Linq.Nodes
         /// <returns></returns>
         protected abstract IEnumerable<TMemberInfo> GetMemberInfosForType(Type type);
 
-        public override MemberInfo ToMemberInfo(ExpressionContext context)
+        public virtual MemberInfo ToMemberInfo(ExpressionContext context)
         {
             {
                 if (string.IsNullOrWhiteSpace(this.Signature))
                     return null;
 
-                var declaringType = this.GetDeclaringType(context);
-                var members = this.GetMemberInfosForType(declaringType);
+            var declaringType = this.GetDeclaringType(context);
+            var members = this.GetMemberInfosForType(context, declaringType);
 
                 var member = members.FirstOrDefault(m => m.ToString() == this.Signature);
                 if (member == null)

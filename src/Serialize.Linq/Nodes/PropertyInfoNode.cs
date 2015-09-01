@@ -36,7 +36,7 @@ namespace Serialize.Linq.Nodes
         public PropertyInfoNode()
             : base(NodeKind.PropertyInfo) { }
 
-        protected override IEnumerable<PropertyInfo> GetMemberInfosForType(Type type)
+        protected override IEnumerable<PropertyInfo> GetMemberInfosForType(ExpressionContext context, Type type)
         {
             return type.GetProperties();
         }

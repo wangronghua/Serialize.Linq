@@ -455,5 +455,16 @@ namespace Serialize.Linq.Factories
             
             throw new ArgumentException("Cannot create node from object of type " + obj.GetType());
         }
+
+        /// <summary>
+        /// Gets binding flags to be used when accessing type members.
+        /// </summary>
+        public BindingFlags? GetBindingFlags()
+        {
+            if (!this.Settings.AllowPrivateFieldAccess)
+                return null;
+
+            return BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+        }
     }
 }
