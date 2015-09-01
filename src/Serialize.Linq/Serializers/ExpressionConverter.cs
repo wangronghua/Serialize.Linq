@@ -11,7 +11,7 @@ namespace Serialize.Linq.Serializers
         public ExpressionNode Convert(Expression expression, FactorySettings factorySettings = null)
         {
             var factory = this.CreateFactory(expression, factorySettings);
-            return factory.Create(expression);
+            return factory.CreateNode(expression) as ExpressionNode;
         }
 
         protected virtual INodeFactory CreateFactory(Expression expression, FactorySettings factorySettings)
