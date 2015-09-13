@@ -28,7 +28,7 @@ namespace Serialize.Linq.Nodes
         [DataContract(Name = "PI")]
     #endif
 #endif
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !__PCL__
     [Serializable]
 #endif
     #endregion

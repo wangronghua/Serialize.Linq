@@ -23,7 +23,7 @@ namespace Serialize.Linq.Nodes
 #else
     [DataContract(Name = "tE")]    
 #endif
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !__PCL__
     [Serializable]
 #endif
     #endregion
@@ -70,7 +70,7 @@ namespace Serialize.Linq.Nodes
 #else
     [DataContract(Name = "E")]
 #endif
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !__PCL__
     [Serializable]
 #endif
     #endregion

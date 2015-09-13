@@ -7,7 +7,7 @@
 #endregion
 
 using System;
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !__PCL__
 using System.Collections.Concurrent;
 #endif
 using System.Text.RegularExpressions;
@@ -18,7 +18,7 @@ namespace Serialize.Linq.Internals
     {
         private static readonly ConcurrentDictionary<Type, Func<object, Type, object>> _userDefinedConverters;
         private static readonly Regex _dateRegex = new Regex(@"/Date\((?<date>\d+)((?<offsign>[-+])((?<offhours>\d{2})(?<offminutes>\d{2})))?\)/"
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !__PCL__
             ,RegexOptions.Compiled
 #endif
             );
@@ -126,7 +126,7 @@ namespace Serialize.Linq.Internals
             // TODO: think about a better way; exception could may have an critical impact on performance
             try
             {
-#if SILVERLIGHT
+#if SILVERLIGHT || __PCL__
                 return System.Convert.ChangeType(value, convertTo, System.Threading.Thread.CurrentThread.CurrentCulture);
 #else
                 return System.Convert.ChangeType(value, convertTo);

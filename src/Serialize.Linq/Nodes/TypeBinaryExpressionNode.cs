@@ -19,7 +19,7 @@ namespace Serialize.Linq.Nodes
 #else
     [DataContract(Name = "TB")]   
 #endif
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !__PCL__
     [Serializable]
 #endif
 
@@ -62,7 +62,7 @@ namespace Serialize.Linq.Nodes
             {
                 case ExpressionType.TypeIs:
                     return System.Linq.Expressions.Expression.TypeIs(this.Expression.ToExpression(context), this.TypeOperand.ToType(context));
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !__PCL__
                 case ExpressionType.TypeEqual:
                     return System.Linq.Expressions.Expression.TypeEqual(this.Expression.ToExpression(context), this.TypeOperand.ToType(context));
 #endif                    

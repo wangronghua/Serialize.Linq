@@ -27,7 +27,7 @@ namespace Serialize.Linq.Internals
         /// </summary>
         /// <param name="type">The type.</param>
         /// <param name="bindingFlags">The binding flags.</param>
-        public MemberTypeEnumerator(Type type, BindingFlags bindingFlags = BindingFlags.Default)
+        public MemberTypeEnumerator(Type type, BindingFlags bindingFlags)
             : this(new HashSet<Type>(), type, bindingFlags) { }
 
         /// <summary>

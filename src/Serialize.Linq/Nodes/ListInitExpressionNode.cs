@@ -19,7 +19,7 @@ namespace Serialize.Linq.Nodes
 #else
     [DataContract(Name = "LI")]
 #endif
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !__PCL__
     [Serializable]
 #endif
     #endregion

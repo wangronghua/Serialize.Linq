@@ -21,7 +21,7 @@ namespace Serialize.Linq.Nodes
 #else
     [CollectionDataContract(Name = "MIL")]
 #endif
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !__PCL__
     [Serializable]
 #endif
     #endregion

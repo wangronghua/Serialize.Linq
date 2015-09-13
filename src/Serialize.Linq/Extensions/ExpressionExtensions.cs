@@ -33,7 +33,7 @@ namespace Serialize.Linq.Extensions
             return converter.Convert(expression);
         }
 
-#if !SILVERLIGHT
+#if !SILVERLIGHT && !__PCL__
         /// <summary>
         /// Converts an expression to an json encoded string.
         /// </summary>
