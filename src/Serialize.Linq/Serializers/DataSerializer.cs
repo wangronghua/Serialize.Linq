@@ -6,10 +6,10 @@
 //  Contributing: https://github.com/esskar/Serialize.Linq
 #endregion
 
-using System;
 using System.IO;
 using Serialize.Linq.Nodes;
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !__PCL__
+using System;
 using System.Runtime.Serialization;
 #endif
 using Serialize.Linq.Interfaces;
@@ -18,7 +18,7 @@ namespace Serialize.Linq.Serializers
 {
     public abstract class DataSerializer : SerializerBase, ISerializer
     {
-#if !WINDOWS_PHONE
+#if !WINDOWS_PHONE && !__PCL__
         public virtual void Serialize<T>(Stream stream, T obj) where T : Node
         {
             if (stream == null)
