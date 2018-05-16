@@ -10,6 +10,7 @@ using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -30,8 +31,10 @@ namespace Serialize.Linq.Nodes
         public MemberExpressionNode(INodeFactory factory, MemberExpression expression)
             : base(factory, expression) { }
 
+        internal override NodeKind NodeKind => NodeKind.MemberExpression;
+
         #region DataMember
-        #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
+#if !SERIALIZE_LINQ_OPTIMIZE_SIZE
         [DataMember(EmitDefaultValue = false)]
 #else
         [DataMember(EmitDefaultValue = false, Name = "E")]

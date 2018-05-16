@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -30,6 +31,8 @@ namespace Serialize.Linq.Nodes
 
         public MemberInfoNode(INodeFactory factory, MemberInfo memberInfo)
             : base(factory, memberInfo) { }
+
+        internal override NodeKind NodeKind => NodeKind.MemberInfo;
 
         protected override IEnumerable<MemberInfo> GetMemberInfosForType(IExpressionContext context, Type type)
         {

@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -31,6 +32,8 @@ namespace Serialize.Linq.Nodes
 
         public MethodInfoNode(INodeFactory factory, MethodInfo memberInfo)
             : base(factory, memberInfo) { }
+
+        internal override NodeKind NodeKind => NodeKind.MethodInfo;
 
         protected override IEnumerable<MethodInfo> GetMemberInfosForType(IExpressionContext context, Type type)
         {

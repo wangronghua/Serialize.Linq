@@ -11,6 +11,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -37,7 +38,7 @@ namespace Serialize.Linq.Nodes
             this.BindingType = bindingType;
             this.Member = new MemberInfoNode(this.Factory, memberInfo);
         }
-        
+
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
         [DataMember(EmitDefaultValue = false)]

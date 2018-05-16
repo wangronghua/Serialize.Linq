@@ -12,6 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -25,7 +26,7 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class MemberBindingNodeList : List<MemberBindingNode>
+    public class MemberBindingNodeList : NodeList<MemberBindingNode>
     {
         public MemberBindingNodeList() { }
 
@@ -37,6 +38,8 @@ namespace Serialize.Linq.Nodes
                 throw new ArgumentNullException("items");
             this.AddRange(items.Select(m => MemberBindingNode.Create(factory, m)));
         }
+
+        internal override NodeKind NodeKind => NodeKind.MemberBindingList;
 
         internal IEnumerable<MemberBinding> GetMemberBindings(IExpressionContext context)
         {

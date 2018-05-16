@@ -12,6 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -25,7 +26,7 @@ namespace Serialize.Linq.Nodes
     [Serializable]
 #endif
     #endregion
-    public class ExpressionNodeList : List<ExpressionNode>
+    public class ExpressionNodeList : NodeList<ExpressionNode>
     {
         public ExpressionNodeList() { }
 
@@ -37,6 +38,8 @@ namespace Serialize.Linq.Nodes
                 throw new ArgumentNullException("items");
             this.AddRange(items.Select(factory.Create));
         }
+
+        internal override NodeKind NodeKind => NodeKind.ExpressionList;
 
         internal IEnumerable<Expression> GetExpressions(IExpressionContext context)
         {

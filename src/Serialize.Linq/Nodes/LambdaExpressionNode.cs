@@ -14,6 +14,7 @@ using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Serialize.Linq.Extensions;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -33,6 +34,8 @@ namespace Serialize.Linq.Nodes
 
         public LambdaExpressionNode(INodeFactory factory, LambdaExpression expression)
             : base(factory, expression) { }
+
+        internal override NodeKind NodeKind => NodeKind.LambdaExpression;
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

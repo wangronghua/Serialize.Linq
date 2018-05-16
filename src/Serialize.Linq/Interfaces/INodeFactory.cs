@@ -22,18 +22,11 @@ namespace Serialize.Linq.Interfaces
         FactorySettings Settings { get; }
 
         /// <summary>
-        /// Creates the specified expression node an expression.
+        /// Creates a node from the given object.
         /// </summary>
-        /// <param name="expression">The expression.</param>
+        /// <param name="expression">The object to create the node from.</param>
         /// <returns></returns>
-        ExpressionNode Create(Expression expression);
-
-        /// <summary>
-        /// Creates the specified type node from a type.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns></returns>
-        TypeNode Create(Type type);
+        Node Create(object obj);
 
         /// <summary>
         /// Gets binding flags to be used when accessing type members.

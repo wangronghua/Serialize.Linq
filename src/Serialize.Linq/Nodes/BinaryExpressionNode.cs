@@ -10,6 +10,7 @@ using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -37,6 +38,8 @@ namespace Serialize.Linq.Nodes
         /// <param name="expression">The expression.</param>
         public BinaryExpressionNode(INodeFactory factory, BinaryExpression expression)
             : base(factory, expression) { }
+
+        internal override NodeKind NodeKind => NodeKind.BinaryExpression;
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

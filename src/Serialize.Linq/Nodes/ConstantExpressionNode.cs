@@ -60,6 +60,8 @@ namespace Serialize.Linq.Nodes
 
         }
 
+        internal override NodeKind NodeKind => NodeKind.ConstantExpression;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ConstantExpressionNode"/> class.
         /// </summary>

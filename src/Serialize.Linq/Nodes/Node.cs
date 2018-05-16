@@ -8,7 +8,7 @@
 
 using System;
 using System.Runtime.Serialization;
-using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -60,28 +60,8 @@ namespace Serialize.Linq.Nodes
         protected Node() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="Node"/> class.
+        /// Defines the kind of this node instance.
         /// </summary>
-        /// <param name="factory">The factory.</param>
-        /// <exception cref="System.ArgumentNullException">factory</exception>
-        protected Node(INodeFactory factory)
-        {
-            if(factory == null)
-                throw new ArgumentNullException("factory");
-
-            this.Factory = factory;
-        }
-
-        /// <summary>
-        /// Gets the factory.
-        /// </summary>
-        /// <value>
-        /// The factory.
-        /// </value>
-        [IgnoreDataMember]
-#if !SILVERLIGHT && !NETSTANDARD && !WINDOWS_UWP
-        [NonSerialized]
-#endif
-        public readonly INodeFactory Factory;        
+        internal abstract NodeKind NodeKind { get; }       
     }
 }

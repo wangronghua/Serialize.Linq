@@ -12,6 +12,7 @@ using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -31,6 +32,8 @@ namespace Serialize.Linq.Nodes
 
         public ParameterExpressionNode(INodeFactory factory, ParameterExpression expression)
             : base(factory, expression) { }
+
+        internal override NodeKind NodeKind => NodeKind.ParameterExpression;
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

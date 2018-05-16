@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -30,6 +31,8 @@ namespace Serialize.Linq.Nodes
 
         public ConstructorInfoNode(INodeFactory factory, ConstructorInfo memberInfo)
             : base(factory, memberInfo) { }
+
+        internal override NodeKind NodeKind => NodeKind.ConstructorInfo;
 
         /// <summary>
         /// Gets the member infos for the specified type.

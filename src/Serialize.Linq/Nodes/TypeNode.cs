@@ -37,6 +37,8 @@ namespace Serialize.Linq.Nodes
             this.Initialize(type);
         }
 
+        internal override NodeKind NodeKind => NodeKind.Type;
+
         private void Initialize(Type type)
         {
             if (type == null)

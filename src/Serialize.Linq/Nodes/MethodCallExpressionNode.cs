@@ -11,6 +11,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -30,6 +31,8 @@ namespace Serialize.Linq.Nodes
 
         public MethodCallExpressionNode(INodeFactory factory, MethodCallExpression expression)
             : base(factory, expression) { }
+
+        internal override NodeKind NodeKind => NodeKind.MethodCallExpression;
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE

@@ -10,6 +10,7 @@ using System;
 using System.Linq.Expressions;
 using System.Runtime.Serialization;
 using Serialize.Linq.Interfaces;
+using Serialize.Linq.Internals;
 
 namespace Serialize.Linq.Nodes
 {
@@ -32,6 +33,8 @@ namespace Serialize.Linq.Nodes
         {
             this.Bindings = new MemberBindingNodeList(factory, memberMemberBinding.Bindings);
         }
+
+        internal override NodeKind NodeKind => NodeKind.MemberMemberBinding;
 
         #region DataMember
 #if !SERIALIZE_LINQ_OPTIMIZE_SIZE
