@@ -12,7 +12,8 @@ namespace Serialize.Linq.Examples.NetCoreApp2
         {
             // No need to do this : ExpressionExtensions.AssemblyLoader = new NetCoreAppAssemblyLoader();
 
-            Expression expression = Expression.Parameter(typeof(Person), "x");
+            string str = "x";
+            Expression expression = Expression.Parameter(typeof(Person), str);
 
             // Serialize expression
             var serializer = new ExpressionSerializer(new JsonSerializer());
